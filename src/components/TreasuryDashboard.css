@@ -1,0 +1,244 @@
+/* ─── Treasury Dashboard ─────────────────────────────────────── */
+
+.treasury-dashboard {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+}
+
+.treasury-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.treasury-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.9rem;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.04));
+    border: 1px solid rgba(34, 197, 94, 0.18);
+    border-radius: 100px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #22c55e;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+}
+
+.treasury-badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: treasuryPulse 2s ease-in-out infinite;
+}
+
+@keyframes treasuryPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+
+    50% {
+        opacity: 0.7;
+        box-shadow: 0 0 8px 4px rgba(34, 197, 94, 0);
+    }
+}
+
+.treasury-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0 0 0.4rem;
+    background: linear-gradient(135deg, #22c55e, #06b6d4, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.treasury-desc {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.88rem;
+    margin: 0;
+}
+
+/* ─── Grid ─────────────────────────────────────────────────── */
+
+.treasury-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.9rem;
+    margin-bottom: 1.2rem;
+}
+
+.treasury-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.028);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 1.3rem;
+    text-align: center;
+    transition: all 0.35s ease;
+    overflow: hidden;
+}
+
+.treasury-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.04), transparent 70%);
+    pointer-events: none;
+}
+
+.treasury-card:hover {
+    border-color: rgba(139, 92, 246, 0.18);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(139, 92, 246, 0.1);
+}
+
+.treasury-card-primary {
+    border-color: rgba(34, 197, 94, 0.15);
+    background: rgba(34, 197, 94, 0.035);
+}
+
+.treasury-card-primary::before {
+    background: radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.06), transparent 70%);
+}
+
+.treasury-card-primary:hover {
+    border-color: rgba(34, 197, 94, 0.28);
+    box-shadow: 0 12px 36px rgba(34, 197, 94, 0.12);
+}
+
+.treasury-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(139, 92, 246, 0.08);
+    color: #8b5cf6;
+    margin-bottom: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.treasury-card:hover .treasury-card-icon {
+    transform: scale(1.08);
+}
+
+.treasury-card-primary .treasury-card-icon {
+    background: rgba(34, 197, 94, 0.08);
+    color: #22c55e;
+}
+
+.treasury-card-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.treasury-card-label {
+    font-size: 0.74rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 500;
+}
+
+/* ─── Balance Row ──────────────────────────────────────────── */
+
+.treasury-balance {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1.3rem;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(6, 182, 212, 0.03));
+    border: 1px solid rgba(139, 92, 246, 0.12);
+    border-radius: 14px;
+    margin-bottom: 0.9rem;
+}
+
+.treasury-balance-label {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+}
+
+.treasury-balance-value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #8b5cf6;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ─── Contract Link ────────────────────────────────────────── */
+
+.treasury-contract-link {
+    text-align: center;
+}
+
+.treasury-contract-link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.treasury-contract-link a:hover {
+    color: #06b6d4;
+}
+
+/* ─── Paused Banner ────────────────────────────────────────── */
+
+.treasury-paused-banner {
+    margin-top: 0.8rem;
+    padding: 0.7rem 1rem;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 12px;
+    color: #f59e0b;
+    font-size: 0.82rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* ─── Responsive ───────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+    .treasury-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.65rem;
+    }
+
+    .treasury-card {
+        padding: 1rem 0.8rem;
+    }
+
+    .treasury-card-value {
+        font-size: 1.1rem;
+    }
+
+    .treasury-title {
+        font-size: 1.3rem;
+    }
+
+    .treasury-card-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 380px) {
+    .treasury-grid {
+        grid-template-columns: 1fr;
+    }
+}

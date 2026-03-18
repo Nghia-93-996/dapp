@@ -1,0 +1,16 @@
+.chain-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.chain-logo svg {
+    display: block;
+}
+
+.chain-logo-default {
+    border-radius: 50%;
+}
