@@ -1,0 +1,720 @@
+/* ═══════════════════════════════════════════════════
+   Documentation Page Styles — Premium Product Docs
+   ═══════════════════════════════════════════════════ */
+
+.pdoc-page {
+    min-height: 100vh;
+    background: #050508;
+    color: #f0f0f5;
+}
+
+/* ── Header ───────────────────────────────────────── */
+.pdoc-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(5, 5, 8, 0.8);
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.06);
+}
+
+.pdoc-header-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pdoc-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pdoc-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pdoc-back-btn:hover {
+    background: rgba(139, 92, 246, 0.06);
+    color: #fff;
+    border-color: rgba(139, 92, 246, 0.15);
+}
+
+/* ── Layout ───────────────────────────────────────── */
+.pdoc-layout {
+    display: flex;
+    max-width: 1280px;
+    margin: 0 auto;
+    min-height: calc(100vh - 60px);
+}
+
+/* ── Sidebar ──────────────────────────────────────── */
+.pdoc-sidebar {
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    width: 270px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 28px 14px 28px 32px;
+}
+
+.pdoc-sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.pdoc-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.pdoc-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+}
+
+.pdoc-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pdoc-nav-label {
+    font-size: 0.64rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.22);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+    padding-left: 4px;
+}
+
+.pdoc-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.pdoc-nav-link:hover {
+    background: rgba(139, 92, 246, 0.05);
+    color: #fff;
+}
+
+.pdoc-nav-icon {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    flex-shrink: 0;
+}
+
+.pdoc-nav-icon--purple { background: rgba(139, 92, 246, 0.1); color: #8B5CF6; }
+.pdoc-nav-icon--green  { background: rgba(34, 197, 94, 0.1);  color: #22c55e; }
+.pdoc-nav-icon--cyan   { background: rgba(6, 182, 212, 0.1);  color: #06B6D4; }
+.pdoc-nav-icon--amber  { background: rgba(245, 158, 11, 0.1); color: #F59E0B; }
+.pdoc-nav-icon--red    { background: rgba(239, 68, 68, 0.1);  color: #ef4444; }
+.pdoc-nav-icon--blue   { background: rgba(59, 130, 246, 0.1); color: #3B82F6; }
+.pdoc-nav-icon--pink   { background: rgba(236, 72, 153, 0.1); color: #EC4899; }
+
+/* ── Main Content ─────────────────────────────────── */
+.pdoc-main {
+    flex: 1;
+    padding: 36px 48px 72px;
+    min-width: 0;
+}
+
+/* ── Hero Banner ──────────────────────────────────── */
+.pdoc-hero {
+    margin-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pdoc-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px 5px 10px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.06));
+    border: 1px solid rgba(139, 92, 246, 0.18);
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(139, 92, 246, 0.9);
+    width: fit-content;
+}
+
+.pdoc-hero-badge .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    animation: pdoc-pulse 2s ease-in-out infinite;
+}
+
+@keyframes pdoc-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.pdoc-hero-title {
+    font-family: BinanceNova, Arial, sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+}
+
+.pdoc-hero-title .gradient-text {
+    background: linear-gradient(135deg, #8B5CF6, #06B6D4, #22C55E);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.pdoc-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 12px 0;
+}
+
+.pdoc-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.pdoc-meta-item strong {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.pdoc-hero-desc {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.42);
+    max-width: 620px;
+}
+
+/* ── Sections ─────────────────────────────────────── */
+.pdoc-section {
+    margin-bottom: 48px;
+    padding-top: 20px;
+    scroll-margin-top: 80px;
+}
+
+.pdoc-section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pdoc-section-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.pdoc-section-icon--purple {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.14), rgba(139, 92, 246, 0.04));
+    color: #8B5CF6;
+    border: 1px solid rgba(139, 92, 246, 0.14);
+}
+
+.pdoc-section-icon--green {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.14), rgba(34, 197, 94, 0.04));
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.14);
+}
+
+.pdoc-section-icon--cyan {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.14), rgba(6, 182, 212, 0.04));
+    color: #06B6D4;
+    border: 1px solid rgba(6, 182, 212, 0.14);
+}
+
+.pdoc-section-icon--amber {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), rgba(245, 158, 11, 0.04));
+    color: #F59E0B;
+    border: 1px solid rgba(245, 158, 11, 0.14);
+}
+
+.pdoc-section-icon--red {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.14), rgba(239, 68, 68, 0.04));
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.14);
+}
+
+.pdoc-section-icon--blue {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.14), rgba(59, 130, 246, 0.04));
+    color: #3B82F6;
+    border: 1px solid rgba(59, 130, 246, 0.14);
+}
+
+.pdoc-section-icon--pink {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.14), rgba(236, 72, 153, 0.04));
+    color: #EC4899;
+    border: 1px solid rgba(236, 72, 153, 0.14);
+}
+
+.pdoc-section-header h2 {
+    font-family: BinanceNova, Arial, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+}
+
+/* ── Content Blocks ───────────────────────────────── */
+.pdoc-block {
+    margin-bottom: 24px;
+}
+
+.pdoc-subtitle {
+    font-family: BinanceNova, Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 10px;
+}
+
+.pdoc-text {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 12px;
+}
+
+.pdoc-text strong {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+}
+
+/* ── Tables ───────────────────────────────────────── */
+.pdoc-table-wrapper {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.pdoc-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pdoc-table thead {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.pdoc-table th {
+    padding: 11px 18px;
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.28);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    white-space: nowrap;
+}
+
+.pdoc-table td {
+    padding: 11px 18px;
+    font-size: 0.84rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.pdoc-table tr:last-child td {
+    border-bottom: none;
+}
+
+.pdoc-table tr:hover td {
+    background: rgba(139, 92, 246, 0.02);
+}
+
+.pdoc-table td:first-child {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.pdoc-table code {
+    font-family: BinanceNova, Arial, sans-serif;
+    font-size: 0.76rem;
+    padding: 3px 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 5px;
+    color: rgba(139, 92, 246, 0.8);
+    word-break: break-all;
+}
+
+.pdoc-table a {
+    color: rgba(6, 182, 212, 0.8);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.pdoc-table a:hover {
+    color: #06B6D4;
+    text-decoration: underline;
+}
+
+/* ── Code Blocks ──────────────────────────────────── */
+.pdoc-code-wrapper {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    margin-bottom: 16px;
+}
+
+.pdoc-code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.pdoc-code-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.pdoc-code-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.pdoc-code-dots span:nth-child(1) { background: rgba(239, 68, 68, 0.55); }
+.pdoc-code-dots span:nth-child(2) { background: rgba(245, 158, 11, 0.55); }
+.pdoc-code-dots span:nth-child(3) { background: rgba(34, 197, 94, 0.55); }
+
+.pdoc-code-lang {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.pdoc-code {
+    padding: 16px 18px;
+    overflow-x: auto;
+    margin: 0;
+}
+
+.pdoc-code code {
+    font-family: BinanceNova, Arial, sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.55);
+    white-space: pre;
+}
+
+/* ── Info Cards ───────────────────────────────────── */
+.pdoc-info-card {
+    padding: 16px 18px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.pdoc-info-card--security {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.06), rgba(34, 197, 94, 0.02));
+    border: 1px solid rgba(34, 197, 94, 0.12);
+}
+
+.pdoc-info-card--warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.06), rgba(245, 158, 11, 0.02));
+    border: 1px solid rgba(245, 158, 11, 0.12);
+}
+
+.pdoc-info-card--info {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.06), rgba(6, 182, 212, 0.02));
+    border: 1px solid rgba(6, 182, 212, 0.12);
+}
+
+.pdoc-info-card-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.pdoc-info-card-text {
+    font-size: 0.84rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Steps List ───────────────────────────────────── */
+.pdoc-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pdoc-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: border-color 0.2s ease;
+}
+
+.pdoc-step:hover {
+    border-color: rgba(139, 92, 246, 0.12);
+}
+
+.pdoc-step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.1));
+    color: #8B5CF6;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.pdoc-step-text {
+    font-size: 0.86rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.pdoc-step-text strong {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── Feature checklist ────────────────────────────── */
+.pdoc-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pdoc-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: rgba(34, 197, 94, 0.03);
+    border: 1px solid rgba(34, 197, 94, 0.08);
+    font-size: 0.84rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.pdoc-check-icon {
+    flex-shrink: 0;
+    color: #22c55e;
+}
+
+/* ── Folder Tree ──────────────────────────────────── */
+.pdoc-tree-wrapper {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.4);
+    margin-bottom: 20px;
+}
+
+.pdoc-tree {
+    padding: 20px 22px;
+    overflow-x: auto;
+    margin: 0;
+}
+
+.pdoc-tree code {
+    font-family: BinanceNova, Arial, sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.45);
+    white-space: pre;
+}
+
+.pdoc-tree .tree-folder {
+    color: rgba(139, 92, 246, 0.8);
+}
+
+.pdoc-tree .tree-file {
+    color: rgba(6, 182, 212, 0.7);
+}
+
+.pdoc-tree .tree-comment {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Footer ───────────────────────────────────────── */
+.pdoc-footer {
+    padding: 32px 48px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    text-align: center;
+}
+
+.pdoc-footer-text {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── SLA Badges ───────────────────────────────────── */
+.pdoc-sla-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.pdoc-sla-badge--critical {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+}
+
+.pdoc-sla-badge--high {
+    background: rgba(245, 158, 11, 0.08);
+    color: #F59E0B;
+}
+
+.pdoc-sla-badge--normal {
+    background: rgba(34, 197, 94, 0.08);
+    color: #22c55e;
+}
+
+.pdoc-sla-badge--low {
+    background: rgba(148, 163, 184, 0.08);
+    color: #94a3b8;
+}
+
+/* ── Formula ──────────────────────────────────────── */
+.pdoc-formula {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.04), rgba(6, 182, 212, 0.03));
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 10px 0 16px;
+}
+
+.pdoc-formula-line {
+    font-family: BinanceNova, Arial, sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.pdoc-formula-line strong {
+    color: rgba(139, 92, 246, 0.9);
+}
+
+/* ── Responsive ───────────────────────────────────── */
+@media (max-width: 960px) {
+    .pdoc-sidebar {
+        display: none;
+    }
+
+    .pdoc-main {
+        padding: 28px 24px 56px;
+    }
+}
+
+@media (max-width: 520px) {
+    .pdoc-header-content {
+        padding: 10px 16px;
+    }
+
+    .pdoc-main {
+        padding: 24px 16px 40px;
+    }
+
+    .pdoc-hero-title {
+        font-size: 1.5rem;
+    }
+
+    .pdoc-hero-desc {
+        font-size: 0.88rem;
+    }
+
+    .pdoc-table th,
+    .pdoc-table td {
+        padding: 9px 10px;
+        font-size: 0.78rem;
+    }
+
+    .pdoc-section-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .pdoc-back-btn {
+        padding: 7px 12px;
+        font-size: 0.78rem;
+    }
+
+    .pdoc-hero-meta {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 380px) {
+    .pdoc-hero-title {
+        font-size: 1.3rem;
+    }
+}

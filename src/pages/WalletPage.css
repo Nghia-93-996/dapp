@@ -1,0 +1,492 @@
+/* ═══════════════════════════════════════════════════
+   WALLET PAGE STYLES
+   ═══════════════════════════════════════════════════ */
+
+/* ── Main Layout ─────────────────────────────────── */
+.wallet-main {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 60px var(--content-padding, 32px) 96px;
+    max-width: 720px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ── Page Header ─────────────────────────────────── */
+.wallet-page-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    animation: walletFadeIn 0.6s ease both;
+}
+
+.wallet-page-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(139, 92, 246, 0.85);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.wallet-page-title {
+    font-family: var(--font-heading, BinanceNova, Arial, sans-serif);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.03em;
+}
+
+.wallet-page-desc {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.55);
+    max-width: 420px;
+}
+
+@keyframes walletFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Connect Prompt ──────────────────────────────── */
+.wallet-connect-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 56px 40px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    text-align: center;
+    width: 100%;
+    animation: walletFadeIn 0.6s ease 0.1s both;
+}
+
+.connect-prompt-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1));
+    border: 1px solid rgba(139, 92, 246, 0.12);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.wallet-connect-prompt h2 {
+    font-family: var(--font-heading, BinanceNova, Arial, sans-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.wallet-connect-prompt p {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.5);
+    max-width: 360px;
+}
+
+.wallet-connect-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    font-family: var(--font-heading, BinanceNova, Arial, sans-serif);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);
+}
+
+.wallet-connect-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+}
+
+.wallet-connect-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ── Wallet Overview Card ────────────────────────── */
+.wallet-overview {
+    width: 100%;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 18px;
+    animation: walletFadeIn 0.6s ease 0.1s both;
+}
+
+.wallet-overview-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.wallet-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid rgba(139, 92, 246, 0.2);
+    flex-shrink: 0;
+}
+
+.wallet-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.wallet-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.wallet-address-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wallet-address-display code {
+    font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.01em;
+}
+
+.wallet-copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wallet-copy-btn:hover {
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.25);
+    color: #8B5CF6;
+}
+
+.wallet-copy-btn.copied {
+    background: rgba(34, 197, 94, 0.12);
+    border-color: rgba(34, 197, 94, 0.25);
+    color: #22C55E;
+}
+
+.wallet-network-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.network-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22C55E;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+}
+
+/* ── Token List Section ──────────────────────────── */
+.token-list-section,
+.cow-details-section {
+    width: 100%;
+    animation: walletFadeIn 0.6s ease 0.2s both;
+}
+
+.token-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.token-list-header h2 {
+    font-family: var(--font-heading, BinanceNova, Arial, sans-serif);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.token-count {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.35);
+    padding: 4px 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 100px;
+}
+
+/* ── Token Row ───────────────────────────────────── */
+.token-list {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.token-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    transition: background 0.2s ease;
+}
+
+.token-row:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.token-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.token-row-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.token-icon-native,
+.token-icon-cow {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.token-icon-native {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.06));
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    color: #F59E0B;
+}
+
+.token-icon-cow {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(6, 182, 212, 0.06));
+    border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+.token-emoji {
+    font-size: 1.3rem;
+    line-height: 1;
+}
+
+.token-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.token-symbol {
+    font-family: var(--font-heading, BinanceNova, Arial, sans-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.token-name {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.token-row-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.token-balance {
+    font-family: var(--font-heading, BinanceNova, Arial, sans-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.01em;
+}
+
+.token-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.token-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.token-action-btn:hover {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.2);
+    color: #8B5CF6;
+}
+
+.token-action-btn.copied {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.2);
+    color: #22C55E;
+}
+
+.token-empty {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.token-empty p {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.9rem;
+}
+
+/* ── COW Stats Grid ──────────────────────────────── */
+.cow-details-section {
+    animation-delay: 0.3s;
+}
+
+.cow-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.cow-stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    transition: all 0.2s ease;
+}
+
+.cow-stat-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cow-stat-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.cow-stat-value {
+    font-family: var(--font-heading, BinanceNova, Arial, sans-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.status-active {
+    color: #22C55E;
+}
+
+.status-paused {
+    color: #EF4444;
+}
+
+/* ── Active Nav Link ─────────────────────────────── */
+.nav-link-active {
+    color: var(--text-primary, #f0f0f5) !important;
+}
+
+.nav-link-active::after {
+    width: 60% !important;
+    left: 20% !important;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 640px) {
+    .wallet-main {
+        padding: 40px 16px 64px;
+        gap: 24px;
+    }
+
+    .wallet-overview {
+        padding: 18px;
+    }
+
+    .wallet-avatar {
+        width: 44px;
+        height: 44px;
+    }
+
+    .cow-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .token-row {
+        padding: 14px 16px;
+    }
+
+    .token-balance {
+        font-size: 0.9rem;
+    }
+
+    .token-actions {
+        display: none;
+    }
+}
