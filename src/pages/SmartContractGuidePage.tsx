@@ -496,9 +496,9 @@ async function main() {
                             <table className="pdoc-table">
                                 <thead><tr><th>Contract</th><th>Địa chỉ</th><th>Explorer</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>COWToken</strong></td><td><code>0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd</code></td><td><a href="https://testnet.bscscan.com/address/0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
-                                    <tr><td><strong>COWTimelock</strong></td><td><code>0xbb183061a7a88e08136611a7781cadBB3337212a</code></td><td><a href="https://testnet.bscscan.com/address/0xbb183061a7a88e08136611a7781cadBB3337212a" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
-                                    <tr><td><strong>Fee Collector</strong></td><td><code>0xb0a5A0b9bFf9433958006826372198a4e74c5802</code></td><td>—</td></tr>
+                                    <tr><td><strong>COWToken</strong></td><td><code>0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8</code></td><td><a href="https://testnet.bscscan.com/address/0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
+                                    <tr><td><strong>COWTimelock</strong></td><td><code>0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413</code></td><td><a href="https://testnet.bscscan.com/address/0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
+                                    <tr><td><strong>Fee Collector</strong></td><td><code>0x65E8c1434E348EE409A0d6488b9e293C3fFdd998</code></td><td>—</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -570,7 +570,7 @@ export const COW_TOKEN_ABI = [
                     <div className="pdoc-block">
                         <h3 className="pdoc-subtitle">7.2 Mapping địa chỉ theo chain</h3>
                         <CodeBlock lang="typescript">{`export const COW_TOKEN_ADDRESSES: Record<string, string> = {
-    '0x61': '0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd',
+    '0x61': '0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8',
 };
 
 export function getCOWTokenAddress(chainId: string | null) {
@@ -667,8 +667,8 @@ await tx.wait();`}</CodeBlock>
 import { ethers } from "hardhat";
 
 async function main() {
-    const TIMELOCK = "0xbb183061a7a88e08136611a7781cadBB3337212a";
-    const COW_TOKEN = "0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd";
+    const TIMELOCK = "0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413";
+    const COW_TOKEN = "0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8";
     const MIN_DELAY = 48 * 60 * 60; // 48h = 172800 giây
 
     const timelock = await ethers.getContractAt("COWTimelock", TIMELOCK);
@@ -742,8 +742,8 @@ console.log("Mint fee đã đổi thành 0.5%!");`}</CodeBlock>
                             <table className="pdoc-table">
                                 <thead><tr><th>Nơi kiểm tra</th><th>Link</th><th>Nội dung</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>BscScan — COWToken</strong></td><td><a href="https://testnet.bscscan.com/address/0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Source code Solidity, verified</td></tr>
-                                    <tr><td><strong>BscScan — Timelock</strong></td><td><a href="https://testnet.bscscan.com/address/0xbb183061a7a88e08136611a7781cadBB3337212a#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Timelock + lệnh đang chờ</td></tr>
+                                    <tr><td><strong>BscScan — COWToken</strong></td><td><a href="https://testnet.bscscan.com/address/0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Source code Solidity, verified</td></tr>
+                                    <tr><td><strong>BscScan — Timelock</strong></td><td><a href="https://testnet.bscscan.com/address/0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Timelock + lệnh đang chờ</td></tr>
 
                                 </tbody>
                             </table>
@@ -777,7 +777,7 @@ console.log("Mint fee đã đổi thành 0.5%!");`}</CodeBlock>
 import { ethers } from "hardhat";
 
 async function main() {
-    const V2 = "0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd";
+    const V2 = "0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8";
     const v2 = await ethers.getContractAt("COWToken", V2);
 
     // Lấy danh sách user qua event logs

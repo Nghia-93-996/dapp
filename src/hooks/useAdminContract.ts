@@ -31,10 +31,10 @@ export interface AdminState {
 // ─── Constants ─────────────────────────────────────────────────────
 
 /** Timelock address (owner of COWToken after deployment) */
-const KNOWN_OWNER = '0xbb183061a7a88e08136611a7781cadBB3337212a';
+const KNOWN_OWNER = '0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413';
 
 /** Deployer / priceUpdater — authorized to call setCOWPrice directly */
-const CONTRACT_CREATOR = '0xb0a5A0b9bFf9433958006826372198a4e74c5802';
+const CONTRACT_CREATOR = '0x65E8c1434E348EE409A0d6488b9e293C3fFdd998';
 
 const STORAGE_KEY = 'cow-timelock-ops';
 
