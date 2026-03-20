@@ -22,8 +22,14 @@ export function useCOWPrice() {
     const [error, setError] = useState<string | null>(null);
 
     const fetchPrice = useCallback(async () => {
-        // Mặc định sử dụng proxy nội bộ để tránh lỗi CORS và hỗ trợ cấu hình động từ .env
-        const apiUrl = import.meta.env.VITE_COW_PRICE_API || '/api/cow-price';
+        // Lấy URL cấu hình từ biến môi trường
+        let apiUrl = import.meta.env.VITE_COW_PRICE_API || '/api/cow-price';
+        
+        // Nếu người dùng nhập URL đầy đủ (ví dụ: https://...), 
+        // hãy tự động chuyển hướng qua proxy nội bộ để tránh lỗi CORS.
+        if (apiUrl.startsWith('http')) {
+            apiUrl = '/api/cow-price';
+        }
         
         if (!apiUrl) {
             setIsLoading(false);
