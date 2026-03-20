@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/cow-price",
-      "destination": "https://coinofworld.com/api/price?time=30d&pair=COW%2FUSD"
+      "destination": "/api/cow-price"
     },
     { "source": "/(.*)", "destination": "/index.html" }
   ]

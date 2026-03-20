@@ -22,10 +22,12 @@ export function useCOWPrice() {
     const [error, setError] = useState<string | null>(null);
 
     const fetchPrice = useCallback(async () => {
-        const apiUrl = import.meta.env.VITE_COW_PRICE_API;
+        // Mặc định sử dụng proxy nội bộ để tránh lỗi CORS và hỗ trợ cấu hình động từ .env
+        const apiUrl = import.meta.env.VITE_COW_PRICE_API || '/api/cow-price';
+        
         if (!apiUrl) {
             setIsLoading(false);
-            setError('VITE_COW_PRICE_API not configured');
+            setError('API URL không được cấu hình');
             return;
         }
 
@@ -36,32 +38,36 @@ export function useCOWPrice() {
             }
 
             const data = await response.json();
-            let newPrice = DEFAULT_PRICE;
+            
+            // --- BỘ PHÂN TÁCH GIÁ THÔNG MINH (SMART PARSER) ---
+            const tryExtractPrice = (obj: any): number | null => {
+                if (!obj) return null;
+                // 1. Các định dạng đã biết
+                if (typeof obj.endRate === 'number') return obj.endRate;
+                if (obj.tether?.usd) return obj.tether.usd;
+                if (obj['cow-protocol']?.usd) return obj['cow-protocol'].usd;
+                if (obj.price) return parseFloat(obj.price);
+                if (typeof obj === 'number') return obj;
 
-            // Parse response based on API format
-            if (data?.endRate && typeof data.endRate === 'number') {
-                // New API: coinofworld.com format
-                newPrice = data.endRate;
-            } else if (data?.tether?.usd) {
-                // CoinGecko tether format
-                newPrice = data.tether.usd;
-            } else if (data?.['cow-protocol']?.usd) {
-                // CoinGecko cow-protocol format
-                newPrice = data['cow-protocol'].usd;
-            } else if (data?.price) {
-                // Binance ticker format: { "symbol": "...", "price": "0.6123" }
-                newPrice = parseFloat(data.price);
-            } else if (typeof data === 'number') {
-                // Plain number
-                newPrice = data;
-            }
+                // 2. Tìm kiếm các trường phổ biến
+                const commonKeys = ['price', 'usd', 'rate', 'value', 'last', 'priceUsd'];
+                for (const key of commonKeys) {
+                    if (typeof obj[key] === 'number') return obj[key];
+                    if (typeof obj[key] === 'string' && !isNaN(parseFloat(obj[key]))) {
+                        return parseFloat(obj[key]);
+                    }
+                }
+                return null;
+            };
 
-            if (!isNaN(newPrice) && newPrice > 0) {
+            const newPrice = tryExtractPrice(data);
+
+            if (newPrice !== null && !isNaN(newPrice) && newPrice > 0) {
                 setPrice(newPrice);
                 setLastUpdated(new Date());
                 setError(null);
             } else {
-                throw new Error('Invalid price data from API');
+                throw new Error('Không thể tìm thấy giá trị giá trong dữ liệu API');
             }
         } catch (err) {
             console.warn('[COW Price] Failed to fetch, using fallback:', err);
