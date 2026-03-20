@@ -21,7 +21,9 @@ export interface TimelockOp {
 
 export interface AdminState {
   isOwner: boolean;
+  isPriceUpdater: boolean; // New
   ownerAddress: string;
+  priceUpdater: string;    // New
   isPaused: boolean;
   feeCollector: string;
   treasury2: string;
@@ -40,7 +42,9 @@ const STORAGE_KEY = 'cow-timelock-ops';
 
 const DEFAULT_ADMIN_STATE: AdminState = {
   isOwner: false,
+  isPriceUpdater: false,
   ownerAddress: KNOWN_OWNER,
+  priceUpdater: '',
   isPaused: false,
   feeCollector: '',
   treasury2: '',
@@ -145,16 +149,20 @@ export function useAdminContract(
         contract.paused(),
         contract.feeCollector(),
         contract.treasury2(),
+        contract.priceUpdater(), // New
       ]);
 
       const ownerAddress  = settledValue<string>(settled, 0, '');
       const isPaused      = settledValue<boolean>(settled, 1, false);
       const feeCollector  = settledValue<string>(settled, 2, '');
       const treasury2     = settledValue<string>(settled, 3, '');
+      const priceUpdater  = settledValue<string>(settled, 4, '');
 
       setState({
         isOwner: !!userAddress && isAuthorizedAdmin(userAddress, ownerAddress),
+        isPriceUpdater: !!userAddress && userAddress.toLowerCase() === priceUpdater.toLowerCase(),
         ownerAddress,
+        priceUpdater,
         isPaused,
         feeCollector,
         treasury2,

@@ -535,8 +535,8 @@ export default function AdminPage() {
         {/* Connected Content */}
         {wallet.isConnected && (
           <>
-            {/* Not-Owner Warning */}
-            {!admin.isLoading && !admin.isOwner && (
+            {/* Not-Authorized Warning */}
+            {!admin.isLoading && !admin.isOwner && !admin.isPriceUpdater && (
               <div className="not-owner-warning">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
@@ -544,8 +544,20 @@ export default function AdminPage() {
                   <line x1="12" y1="17" x2="12.01" y2="17" />
                 </svg>
                 <span>
-                  Your wallet ({shortenAddress(wallet.address ?? '')}) is <strong>not the contract owner</strong>.
-                  Owner (Timelock): <code>{shortenAddr(admin.ownerAddress)}</code>. Admin functions are disabled.
+                  Your wallet ({shortenAddress(wallet.address ?? '')}) is <strong>not authorized</strong> for admin actions.
+                  Owner: <code>{shortenAddr(admin.ownerAddress)}</code>.
+                </span>
+              </div>
+            )}
+
+            {/* Price-Updater-Only Warning (if they are updater but not owner) */}
+            {!admin.isLoading && !admin.isOwner && admin.isPriceUpdater && (
+              <div className="not-owner-warning" style={{ background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)', color: '#60a5fa' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+                <span>
+                  You are the <strong>Price Updater</strong>. You can update the COW price directly, but other admin functions require the Owner role.
                 </span>
               </div>
             )}
@@ -612,6 +624,16 @@ export default function AdminPage() {
                   <span className="status-label">You are Proposer</span>
                   <span className={`status-value ${admin.isOwner ? 'active' : 'paused'}`}>
                     {admin.isOwner ? '✅ Yes' : '❌ No'}
+                  </span>
+                </div>
+                <div className="status-item">
+                  <span className="status-label">Price Updater</span>
+                  <span className="status-value address">{shortenAddr(admin.priceUpdater)}</span>
+                </div>
+                <div className="status-item">
+                  <span className="status-label">You are Price Updater</span>
+                  <span className={`status-value ${admin.isPriceUpdater ? 'active' : 'paused'}`}>
+                    {admin.isPriceUpdater ? '✅ Yes' : '❌ No'}
                   </span>
                 </div>
                 <div className="status-item">
@@ -740,7 +762,7 @@ export default function AdminPage() {
                   desc="Set the COW token price in USD. This updates instantly without Timelock delay."
                   currentOnChain={cowContract.cowPriceUsd}
                   onSubmit={admin.setCOWPrice}
-                  disabled={isDisabled}
+                  disabled={!admin.isOwner && !admin.isPriceUpdater || admin.isLoading}
                 />
               </div>
             </section>
