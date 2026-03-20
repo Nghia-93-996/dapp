@@ -753,8 +753,8 @@ export default function AdminPage() {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
-                COW price is fetched from CoinGecko (tether) API. Use this to manually override the on-chain price.
-                Value is stored in 8 decimals (e.g., $1.0012 = 100120000 raw).
+                Giá COW được lấy từ API (hỗ trợ CoinGecko, CoinOfWorld, Binance). Dùng chức năng này để ghi đè giá trực tiếp lên hợp đồng.
+                Giá trị được lưu với 8 chữ số thập phân (ví dụ: $1.0012 = 100120000).
               </div>
               <div className="admin-cards-grid">
                 <PriceCard

@@ -9,6 +9,7 @@ const REFRESH_INTERVAL_MS = 60_000; // 60 seconds
  * Auto-refreshes every 60 seconds. Falls back to $1.00 on error.
  *
  * Supported response formats:
+ *   - CoinOfWorld: { "status": true, "endRate": 0.2619 }
  *   - CoinGecko tether: { "tether": { "usd": 1.0 } }
  *   - CoinGecko cow-protocol: { "cow-protocol": { "usd": 0.42 } }
  *   - Binance ticker: { "symbol": "XRPUSDT", "price": "0.6123" }
@@ -38,7 +39,10 @@ export function useCOWPrice() {
             let newPrice = DEFAULT_PRICE;
 
             // Parse response based on API format
-            if (data?.tether?.usd) {
+            if (data?.endRate && typeof data.endRate === 'number') {
+                // New API: coinofworld.com format
+                newPrice = data.endRate;
+            } else if (data?.tether?.usd) {
                 // CoinGecko tether format
                 newPrice = data.tether.usd;
             } else if (data?.['cow-protocol']?.usd) {
