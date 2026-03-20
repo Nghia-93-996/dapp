@@ -144,7 +144,7 @@ export default function SmartContractGuidePage() {
                             <table className="pdoc-table">
                                 <thead><tr><th>{t("smartContract.s2_2H_type")}</th><th>{t("smartContract.s2_2H_rate")}</th><th>{t("smartContract.s2_2H_receiver")}</th><th>{t("smartContract.s2_2H_purpose")}</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>Spread Fee</strong></td><td>1% (100 bps)</td><td>Treasury2</td><td>{t("smartContract.s2_2R1_purpose")}</td></tr>
+                                    <tr><td><strong>Spread Fee</strong></td><td>1% (100 bps)</td><td>Treasury2</td><td>Dự trữ & phát triển</td></tr>
                                     <tr><td><strong>Mint Fee</strong></td><td>0.3% (30 bps)</td><td>Fee Collector</td><td>{t("smartContract.s2_2R2_purpose")}</td></tr>
                                     <tr><td><strong>Burn Fee</strong></td><td>0.3% (30 bps)</td><td>Fee Collector</td><td>{t("smartContract.s2_2R3_purpose")}</td></tr>
                                     <tr><td><strong>Liquidation Penalty</strong></td><td>5% (500 bps)</td><td>Liquidator</td><td>{t("smartContract.s2_2R4_purpose")}</td></tr>
@@ -186,11 +186,11 @@ uint256 public mintFeeBps;              // 30 = 0.3%
 uint256 public burnFeeBps;              // 30 = 0.3%
 
 // Addresses
-address public feeCollector;            // Receives mint/burn fee
-address public treasury2;               // Receives spread fee
+address public feeCollector;            // Nhận mint/burn fee
+address public treasury2;               // Nhận spread fee
 
 // Collateral tracking
-uint256 public totalCollateral;         // Total BNB locked
+uint256 public totalCollateral;         // Tổng BNB locked
 
 // Per-user position
 struct CollateralPosition {
@@ -364,23 +364,23 @@ event PriceFeedUpdated(address old, address new);`}</CodeBlock>
                     </div>
 
                     {/* ═══ SECTION 4: COWTimelock ═══ */}
-                    <Section id="cow-timelock" title={t('smartContract.s4Title')} accent="amber"
+                    <Section id="cow-timelock" title="4. COWTimelock.sol — 48h Timelock" accent="amber"
                         icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>} />
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s4_1Title')}</h3>
+                        <h3 className="pdoc-subtitle">4.1 Mục đích</h3>
                         <p className="pdoc-text">
-                            <code>COWTimelock</code> {t('smartContract.s4_1Text')}
+                            <code>COWTimelock</code> kế thừa <code>TimelockController</code> từ OpenZeppelin — đảm bảo mọi thay đổi admin trên COWToken phải qua quy trình 3 bước với thời gian chờ <strong>48 giờ</strong>.
                         </p>
                         <ol className="pdoc-steps">
-                            <li className="pdoc-step"><span className="pdoc-step-num">1</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s4_1Step1') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">2</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s4_1Step2') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">3</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s4_1Step3') }} /></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">1</span><span className="pdoc-step-text"><strong>Schedule</strong> — Proposer đề xuất thay đổi → emits <code>CallScheduled</code> event</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">2</span><span className="pdoc-step-text"><strong>Wait 48h</strong> — Community có thể thấy thay đổi sắp tới và burn token nếu không đồng ý (ragequit)</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">3</span><span className="pdoc-step-text"><strong>Execute</strong> — Executor thực hiện thay đổi sau khi hết thời gian chờ</span></li>
                         </ol>
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s4_2Title')}</h3>
+                        <h3 className="pdoc-subtitle">4.2 Source Code</h3>
                         <CodeBlock lang="solidity">{`// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
@@ -397,26 +397,26 @@ contract COWTimelock is TimelockController {
                     </div>
 
                     {/* ═══ SECTION 5: Deploy ═══ */}
-                    <Section id="deploy" title={t('smartContract.s5Title')} accent="red"
+                    <Section id="deploy" title="5. Hướng dẫn Deploy Smart Contract" accent="red"
                         icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>} />
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s5_1Title')}</h3>
+                        <h3 className="pdoc-subtitle">5.1 Yêu cầu</h3>
                         <div className="pdoc-table-wrapper">
                             <table className="pdoc-table">
-                                <thead><tr><th>{t('smartContract.s5_1H_req')}</th><th>{t('smartContract.s5_1H_detail')}</th></tr></thead>
+                                <thead><tr><th>Yêu cầu</th><th>Chi tiết</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>Node.js</strong></td><td>{t('smartContract.s5_1R1')}</td></tr>
-                                    <tr><td><strong>Hardhat</strong></td><td>{t('smartContract.s5_1R2')}</td></tr>
-                                    <tr><td><strong>Private Key</strong></td><td>{t('smartContract.s5_1R3')}</td></tr>
-                                    <tr><td><strong>tBNB (Testnet)</strong></td><td>{t('smartContract.s5_1R4')} <a href="https://www.bnbchain.org/en/testnet-faucet" target="_blank" rel="noopener noreferrer">{t('smartContract.s5_1R4Link')}</a></td></tr>
+                                    <tr><td><strong>Node.js</strong></td><td>≥ 22.0.0</td></tr>
+                                    <tr><td><strong>Hardhat</strong></td><td>Đã cài trong <code>contracts/package.json</code></td></tr>
+                                    <tr><td><strong>Private Key</strong></td><td>Wallet có BNB để trả gas fee</td></tr>
+                                    <tr><td><strong>tBNB (Testnet)</strong></td><td>Lấy từ <a href="https://www.bnbchain.org/en/testnet-faucet" target="_blank" rel="noopener noreferrer">BNB Testnet Faucet</a></td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s5_2Title')}</h3>
+                        <h3 className="pdoc-subtitle">5.2 Cấu hình Hardhat</h3>
                         <CodeBlock lang="typescript">{`// contracts/hardhat.config.ts
 import { config as dotenvConfig } from "dotenv";
 dotenvConfig({ path: path.resolve(__dirname, "../.env") });
@@ -444,24 +444,24 @@ const config: HardhatUserConfig = {
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s5_3Title')}</h3>
+                        <h3 className="pdoc-subtitle">5.3 Step-by-step Deploy</h3>
                         <ol className="pdoc-steps">
-                            <li className="pdoc-step"><span className="pdoc-step-num">1</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s5_3S1') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">2</span><span className="pdoc-step-text">{t('smartContract.s5_3S2Prefix')}<br /><code>DEPLOYER_PRIVATE_KEY=...</code><br /><code>BSCSCAN_API_KEY=...</code></span></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">3</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s5_3S3') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">4</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s5_3S4') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">5</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s5_3S5') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">6</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s5_3S6') }} /></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">1</span><span className="pdoc-step-text">Cài đặt dependencies: <code>cd contracts && npm install</code></span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">2</span><span className="pdoc-step-text">Tạo file <code>.env</code> ở thư mục gốc:<br /><code>DEPLOYER_PRIVATE_KEY=7de11db97e666bb34f396097fe04a995daddf87d2a34971544195960766fe2cd</code><br /><code>BSCSCAN_API_KEY=</code></span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">3</span><span className="pdoc-step-text">Biên dịch contract: <code>npx hardhat compile</code></span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">4</span><span className="pdoc-step-text">Chạy unit tests: <code>npx hardhat test</code></span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">5</span><span className="pdoc-step-text">Deploy lên Testnet: <code>npx hardhat run scripts/deploy.ts --network bscTestnet</code></span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">6</span><span className="pdoc-step-text">Ghi lại địa chỉ contract → cập nhật vào <code>src/contracts/cowConfig.ts</code></span></li>
                         </ol>
                         <div className="pdoc-info-card pdoc-info-card--warning">
                             <span className="pdoc-info-card-icon">⚠️</span>
-                            <span className="pdoc-info-card-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s5_3Warn') }} />
+                            <span className="pdoc-info-card-text"><strong>KHÔNG commit private key vào git!</strong> Luôn dùng file <code>.env</code> và thêm vào <code>.gitignore</code>.</span>
                         </div>
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s5_4Title')}</h3>
-                        <p className="pdoc-text">{t('smartContract.s5_4Text')}</p>
+                        <h3 className="pdoc-subtitle">5.4 Deploy Script chi tiết</h3>
+                        <p className="pdoc-text">Script deploy thực hiện 3 bước tuần tự:</p>
                         <CodeBlock lang="typescript">{`// contracts/scripts/deploy.ts
 async function main() {
     // Bước 1: Deploy COWTimelock (48h delay)
@@ -491,13 +491,13 @@ async function main() {
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s5_5Title')}</h3>
+                        <h3 className="pdoc-subtitle">5.5 Địa chỉ Contract đã deploy (BSC Testnet)</h3>
                         <div className="pdoc-table-wrapper">
                             <table className="pdoc-table">
-                                <thead><tr><th>{t('smartContract.s5_5H_contract')}</th><th>{t('smartContract.s5_5H_address')}</th><th>{t('smartContract.s5_5H_explorer')}</th></tr></thead>
+                                <thead><tr><th>Contract</th><th>Địa chỉ</th><th>Explorer</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>COWToken</strong></td><td><code>0xd1f43Dd4Ef60492DA2F777e424654411176b0FDA</code></td><td><a href="https://testnet.bscscan.com/address/0xd1f43Dd4Ef60492DA2F777e424654411176b0FDA" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
-                                    <tr><td><strong>COWTimelock</strong></td><td><code>0xE81ff03d5Da09eaa843B8E0ef60C7f357F858B58</code></td><td><a href="https://testnet.bscscan.com/address/0xE81ff03d5Da09eaa843B8E0ef60C7f357F858B58" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
+                                    <tr><td><strong>COWToken</strong></td><td><code>0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd</code></td><td><a href="https://testnet.bscscan.com/address/0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
+                                    <tr><td><strong>COWTimelock</strong></td><td><code>0xbb183061a7a88e08136611a7781cadBB3337212a</code></td><td><a href="https://testnet.bscscan.com/address/0xbb183061a7a88e08136611a7781cadBB3337212a" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
                                     <tr><td><strong>Fee Collector</strong></td><td><code>0xb0a5A0b9bFf9433958006826372198a4e74c5802</code></td><td>—</td></tr>
                                 </tbody>
                             </table>
@@ -505,24 +505,24 @@ async function main() {
                     </div>
 
                     {/* ═══ SECTION 6: Security ═══ */}
-                    <Section id="security" title={t('smartContract.s6Title')} accent="blue"
+                    <Section id="security" title="6. Bảo mật & Anti-Rug-Pull" accent="blue"
                         icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>} />
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s6_1Title')}</h3>
+                        <h3 className="pdoc-subtitle">6.1 Mô hình Anti-Rug-Pull</h3>
                         <ul className="pdoc-checklist">
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s6_1C1') }} /></li>
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s6_1C2') }} /></li>
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s6_1C3') }} /></li>
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s6_1C4') }} /></li>
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s6_1C5') }} /></li>
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s6_1C6') }} /></li>
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s6_1C7') }} /></li>
+                            <li className="pdoc-check"><CheckIcon />KHÔNG CÓ hàm <strong>withdraw()</strong> cho admin — BNB chỉ ra khỏi contract qua burn hoặc liquidation</li>
+                            <li className="pdoc-check"><CheckIcon />KHÔNG CÓ hàm admin <strong>mint()</strong> — Token chỉ được tạo khi có tài sản thế chấp</li>
+                            <li className="pdoc-check"><CheckIcon /><strong>ReentrancyGuard</strong> — Chống tấn công reentrancy trên mọi hàm core</li>
+                            <li className="pdoc-check"><CheckIcon /><strong>Pausable</strong> — Admin có thể tạm dừng contract khi khẩn cấp (qua Timelock 48h)</li>
+                            <li className="pdoc-check"><CheckIcon /><strong>Ownable + TimelockController</strong> — Mọi thay đổi admin có thời gian chờ 48 giờ</li>
+                            <li className="pdoc-check"><CheckIcon /><strong>MAX_FEE_BPS = 500</strong> — Admin không thể set phí cao hơn 5%</li>
+                            <li className="pdoc-check"><CheckIcon /><strong>receive() revert</strong> — Không chấp nhận BNB gửi trực tiếp, phải dùng mint()</li>
                         </ul>
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s6_2Title')}</h3>
+                        <h3 className="pdoc-subtitle">6.2 Cơ chế bảo vệ Oracle</h3>
                         <CodeBlock lang="solidity">{`function _getBNBPrice() internal view returns (uint256) {
     (, int256 price, , uint256 updatedAt, ) =
         priceFeed.latestRoundData();
@@ -539,12 +539,12 @@ async function main() {
                     </div>
 
                     {/* ═══ SECTION 7: Frontend Integration ═══ */}
-                    <Section id="frontend" title={t('smartContract.s7Title')} accent="purple"
+                    <Section id="frontend" title="7. Tích hợp Frontend" accent="purple"
                         icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>} />
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s7_1Title')}</h3>
-                        <p className="pdoc-text">{t('smartContract.s7_1Text')}</p>
+                        <h3 className="pdoc-subtitle">7.1 Cấu hình ABI (cowConfig.ts)</h3>
+                        <p className="pdoc-text">Frontend sử dụng <strong>Human-Readable ABI</strong> từ ethers.js v6 — chỉ include các hàm cần dùng:</p>
                         <CodeBlock lang="typescript">{`// src/contracts/cowConfig.ts
 export const COW_TOKEN_ABI = [
     // Read
@@ -568,9 +568,9 @@ export const COW_TOKEN_ABI = [
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s7_2Title')}</h3>
+                        <h3 className="pdoc-subtitle">7.2 Mapping địa chỉ theo chain</h3>
                         <CodeBlock lang="typescript">{`export const COW_TOKEN_ADDRESSES: Record<string, string> = {
-    '0x61': '0xd1f43Dd4Ef60492DA2F777e424654411176b0FDA',
+    '0x61': '0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd',
 };
 
 export function getCOWTokenAddress(chainId: string | null) {
@@ -580,7 +580,7 @@ export function getCOWTokenAddress(chainId: string | null) {
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s7_3Title')}</h3>
+                        <h3 className="pdoc-subtitle">7.3 Cách gọi contract từ React</h3>
                         <CodeBlock lang="typescript">{`import { ethers } from 'ethers';
 import { COW_TOKEN_ABI, getCOWTokenAddress } from '../contracts/cowConfig';
 
@@ -626,49 +626,49 @@ await tx.wait();`}</CodeBlock>
                             Mọi thay đổi thông số trên COWToken đều <strong>phải đi qua hệ thống Timelock</strong> (COWTimelock). Admin <strong>KHÔNG THỂ</strong> thay đổi tức thời, mà phải chờ tối thiểu <strong>48 giờ</strong>.
                         </p>
                         <ol className="pdoc-steps">
-                            <li className="pdoc-step"><span className="pdoc-step-num">1</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_2S1') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">2</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_2S2') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">3</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_2S3') }} /></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">1</span><span className="pdoc-step-text"><strong>Schedule (Đặt lịch)</strong> — Admin gửi lệnh nâng cấp lên Timelock. Lệnh được ghi on-chain, <strong>công khai cho toàn bộ cộng đồng</strong> thấy. Lệnh <strong>CHƯA có hiệu lực</strong>.</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">2</span><span className="pdoc-step-text"><strong>Wait 48h (Chờ đợi)</strong> — Hệ thống <strong>treo lệnh trong 48 giờ</strong>. Trong thời gian này:<br />• Mọi người xem lệnh đang chờ trên <strong>BscScan</strong><br />• User kiểm tra <strong>source code + smart contract</strong> để đánh giá<br />• Nếu thấy dấu hiệu rug-pull → user <strong>Burn token + rút BNB</strong> trước khi lệnh có hiệu lực<br />• Admin có thể <strong>hủy lệnh</strong> nếu phát hiện lỗ hổng hoặc sai sót</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">3</span><span className="pdoc-step-text"><strong>Execute (Thực thi)</strong> — Sau 48h, admin mới được thực thi lệnh. Nếu không execute, lệnh <strong>tự hết hạn</strong>.</span></li>
                         </ol>
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s8_3Title')}</h3>
-                        <p className="pdoc-text">{t('smartContract.s8_3Text')}</p>
+                        <h3 className="pdoc-subtitle">8.3 Bảng thông số có thể thay đổi</h3>
+                        <p className="pdoc-text">Tất cả thông số admin có thể thay đổi — mỗi thay đổi phải qua Timelock 48h:</p>
                         <div className="pdoc-table-wrapper">
                             <table className="pdoc-table">
-                                <thead><tr><th>{t('smartContract.s8_3H1')}</th><th>{t('smartContract.s8_3H2')}</th><th>{t('smartContract.s8_3H3')}</th><th>{t('smartContract.s8_3H4')}</th></tr></thead>
+                                <thead><tr><th>Hàm admin</th><th>Chức năng</th><th>Giá trị hiện tại</th><th>Giới hạn tối đa</th></tr></thead>
                                 <tbody>
-                                    <tr><td><code>setMintFee(bps)</code></td><td>{t('smartContract.s8_3R1_desc')}</td><td>30 bps (0.3%)</td><td>≤ 500 bps (5%)</td></tr>
-                                    <tr><td><code>setBurnFee(bps)</code></td><td>{t('smartContract.s8_3R2_desc')}</td><td>30 bps (0.3%)</td><td>≤ 500 bps (5%)</td></tr>
-                                    <tr><td><code>setSpreadBps(bps)</code></td><td>{t('smartContract.s8_3R3_desc')}</td><td>100 bps (1%)</td><td>≤ 500 bps (5%)</td></tr>
-                                    <tr><td><code>setLtv(bps)</code></td><td>{t('smartContract.s8_3R4_desc')}</td><td>8000 bps (80%)</td><td>≤ 9000 bps (90%)</td></tr>
-                                    <tr><td><code>setLiquidationThreshold(bps)</code></td><td>{t('smartContract.s8_3R5_desc')}</td><td>10500 bps (105%)</td><td>{'>'} 10000 bps</td></tr>
-                                    <tr><td><code>setFeeCollector(addr)</code></td><td>{t('smartContract.s8_3R6_desc')}</td><td>Deployer wallet</td><td>≠ 0x0</td></tr>
-                                    <tr><td><code>setTreasury2(addr)</code></td><td>{t('smartContract.s8_3R7_desc')}</td><td>Deployer wallet</td><td>≠ 0x0</td></tr>
-                                    <tr><td><code>setPriceFeed(addr)</code></td><td>{t('smartContract.s8_3R8_desc')}</td><td>Chainlink BNB/USD</td><td>≠ 0x0</td></tr>
-                                    <tr><td><code>pause()</code></td><td>{t('smartContract.s8_3R9_desc')}</td><td>—</td><td>—</td></tr>
-                                    <tr><td><code>unpause()</code></td><td>{t('smartContract.s8_3R10_desc')}</td><td>—</td><td>—</td></tr>
+                                    <tr><td><code>setMintFee(bps)</code></td><td>Thay đổi phí mint</td><td>30 bps (0.3%)</td><td>≤ 500 bps (5%)</td></tr>
+                                    <tr><td><code>setBurnFee(bps)</code></td><td>Thay đổi phí burn</td><td>30 bps (0.3%)</td><td>≤ 500 bps (5%)</td></tr>
+                                    <tr><td><code>setSpreadBps(bps)</code></td><td>Thay đổi spread fee</td><td>100 bps (1%)</td><td>≤ 500 bps (5%)</td></tr>
+                                    <tr><td><code>setLtv(bps)</code></td><td>Thay đổi tỷ lệ LTV</td><td>8000 bps (80%)</td><td>≤ 9000 bps (90%)</td></tr>
+                                    <tr><td><code>setLiquidationThreshold(bps)</code></td><td>Ngưỡng thanh lý</td><td>10500 bps (105%)</td><td>{'>'} 10000 bps</td></tr>
+                                    <tr><td><code>setFeeCollector(addr)</code></td><td>Đổi ví nhận fee</td><td>Deployer wallet</td><td>≠ 0x0</td></tr>
+                                    <tr><td><code>setTreasury2(addr)</code></td><td>Đổi ví spread fee</td><td>Deployer wallet</td><td>≠ 0x0</td></tr>
+                                    <tr><td><code>setPriceFeed(addr)</code></td><td>Đổi oracle</td><td>Chainlink BNB/USD</td><td>≠ 0x0</td></tr>
+                                    <tr><td><code>pause()</code></td><td>Tạm dừng contract</td><td>—</td><td>—</td></tr>
+                                    <tr><td><code>unpause()</code></td><td>Mở lại contract</td><td>—</td><td>—</td></tr>
                                 </tbody>
                             </table>
                         </div>
                         <div className="pdoc-info-card pdoc-info-card--warning">
                             <span className="pdoc-info-card-icon">⚠️</span>
-                            <span className="pdoc-info-card-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_3Warn') }} />
+                            <span className="pdoc-info-card-text"><strong>Bảo vệ cứng (hardcoded):</strong> Smart contract đã <strong>ghi cứng giới hạn tối đa</strong>. Phí <strong>KHÔNG THỂ vượt 5%</strong>, LTV <strong>KHÔNG THỂ vượt 90%</strong>. Không ai thay đổi được, kể cả admin.</span>
                         </div>
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s8_4Title')}</h3>
-                        <p className="pdoc-text"><strong dangerouslySetInnerHTML={{ __html: t('smartContract.s8_4Text') }} /></p>
+                        <h3 className="pdoc-subtitle">8.4 Ví dụ: Đổi mint fee qua Timelock</h3>
+                        <p className="pdoc-text"><strong>Ví dụ:</strong> Đổi mint fee từ 0.3% (30 bps) → 0.5% (50 bps):</p>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>{t('smartContract.s8_4S1')}</h4>
+                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>Bước 1: Schedule — Đặt lịch</h4>
                         <CodeBlock lang="typescript">{`// scripts/timelock-schedule.ts
 import { ethers } from "hardhat";
 
 async function main() {
-    const TIMELOCK = "0xE81ff03d5Da09eaa843B8E0ef60C7f357F858B58";
-    const COW_TOKEN = "0xd1f43Dd4Ef60492DA2F777e424654411176b0FDA";
+    const TIMELOCK = "0xbb183061a7a88e08136611a7781cadBB3337212a";
+    const COW_TOKEN = "0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd";
     const MIN_DELAY = 48 * 60 * 60; // 48h = 172800 giây
 
     const timelock = await ethers.getContractAt("COWTimelock", TIMELOCK);
@@ -692,15 +692,15 @@ async function main() {
     console.log("Lệnh đã schedule! Chờ 48h...");
 }`}</CodeBlock>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>{t('smartContract.s8_4S2')}</h4>
+                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>Bước 2: Chờ 48h — Cộng đồng kiểm tra</h4>
                         <ul className="pdoc-checklist">
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s8_4C1') }} /></li>
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s8_4C2') }} /></li>
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s8_4C3') }} /></li>
-                            <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s8_4C4') }} /></li>
+                            <li className="pdoc-check"><CheckIcon />Xem lệnh trên <strong>BscScan</strong> (event <code>CallScheduled</code>)</li>
+                            <li className="pdoc-check"><CheckIcon />Giải mã <code>callData</code> để biết <strong>thông số nào thay đổi</strong></li>
+                            <li className="pdoc-check"><CheckIcon />Không đồng ý → <strong>Burn COW + rút BNB</strong> trước 48h</li>
+                            <li className="pdoc-check"><CheckIcon />Admin hủy lệnh bằng <code>cancel(operationId)</code> nếu sai sót</li>
                         </ul>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>{t('smartContract.s8_4S3')}</h4>
+                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>Bước 3: Execute — Thực thi sau 48h</h4>
                         <CodeBlock lang="typescript">{`// Chạy SAU 48h
 const tx = await timelock.execute(
     COW_TOKEN, 0, callData,
@@ -712,72 +712,72 @@ console.log("Mint fee đã đổi thành 0.5%!");`}</CodeBlock>
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s8_5Title')}</h3>
+                        <h3 className="pdoc-subtitle">8.5 Bảo vệ người dùng — Anti-Rug-Pull</h3>
                         <p className="pdoc-text">
-                            {t('smartContract.s8_5Text')}
+                            Timelock 48h là <strong>cơ chế bảo vệ quan trọng nhất</strong> cho người nắm giữ COW token:
                         </p>
                         <div className="pdoc-table-wrapper">
                             <table className="pdoc-table">
-                                <thead><tr><th>{t('smartContract.s8_5H1')}</th><th>{t('smartContract.s8_5H2')}</th><th>{t('smartContract.s8_5H3')}</th></tr></thead>
+                                <thead><tr><th>Tình huống</th><th>Hành động của User</th><th>Thời gian</th></tr></thead>
                                 <tbody>
-                                    <tr><td>{t('smartContract.s8_5R1_case')}</td><td>{t('smartContract.s8_5R1_action')}</td><td>48 {t('common.hours')}</td></tr>
-                                    <tr><td>{t('smartContract.s8_5R2_case')}</td><td>{t('smartContract.s8_5R2_action')}</td><td>48 {t('common.hours')}</td></tr>
-                                    <tr><td>{t('smartContract.s8_5R3_case')}</td><td>{t('smartContract.s8_5R3_action')}</td><td>48 {t('common.hours')}</td></tr>
-                                    <tr><td>{t('smartContract.s8_5R4_case')}</td><td>{t('smartContract.s8_5R4_action')}</td><td>48 {t('common.hours')}</td></tr>
+                                    <tr><td>Admin schedule <strong>tăng phí lên 5%</strong></td><td>Kiểm tra BscScan → Burn COW + rút BNB trước 48h</td><td>48 giờ</td></tr>
+                                    <tr><td>Admin schedule <strong>đổi oracle</strong></td><td>Kiểm tra oracle mới → Rút tài sản nếu nghi ngờ</td><td>48 giờ</td></tr>
+                                    <tr><td>Admin schedule <strong>pause contract</strong></td><td>Burn + rút BNB trước khi contract bị pause</td><td>48 giờ</td></tr>
+                                    <tr><td>Admin <strong>đổi fee collector</strong></td><td>Phí chỉ ảnh hưởng giao dịch future</td><td>48 giờ</td></tr>
                                 </tbody>
                             </table>
                         </div>
                         <div className="pdoc-info-card pdoc-info-card--security">
                             <span className="pdoc-info-card-icon">🛡️</span>
-                            <span className="pdoc-info-card-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_5Shield') }} />
+                            <span className="pdoc-info-card-text"><strong>Quyền của User (không ai tước được):</strong><br />• User <strong>LUÔN có quyền burn COW</strong> và rút BNB bất cứ lúc nào<br />• Admin <strong>KHÔNG CÓ hàm withdraw()</strong> — không rút được BNB của user<br />• Admin <strong>KHÔNG CÓ hàm admin mint()</strong> — không tạo token từ hư không</span>
                         </div>
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s8_6Title')}</h3>
+                        <h3 className="pdoc-subtitle">8.6 Công khai Source Code + Smart Contract</h3>
                         <p className="pdoc-text">
-                            {t('smartContract.s8_6Text')}
+                            Toàn bộ source code được <strong>công khai hoàn toàn</strong>:
                         </p>
                         <div className="pdoc-table-wrapper">
                             <table className="pdoc-table">
-                                <thead><tr><th>{t('smartContract.s8_6H1')}</th><th>{t('smartContract.s8_6H2')}</th><th>{t('smartContract.s8_6H3')}</th></tr></thead>
+                                <thead><tr><th>Nơi kiểm tra</th><th>Link</th><th>Nội dung</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>BscScan — COWToken</strong></td><td><a href="https://testnet.bscscan.com/address/0xd1f43Dd4Ef60492DA2F777e424654411176b0FDA#code" target="_blank" rel="noopener noreferrer">BscScan</a></td><td>Source code Solidity, verified</td></tr>
-                                    <tr><td><strong>BscScan — Timelock</strong></td><td><a href="https://testnet.bscscan.com/address/0xE81ff03d5Da09eaa843B8E0ef60C7f357F858B58#code" target="_blank" rel="noopener noreferrer">BscScan</a></td><td>Timelock + lệnh đang chờ</td></tr>
+                                    <tr><td><strong>BscScan — COWToken</strong></td><td><a href="https://testnet.bscscan.com/address/0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Source code Solidity, verified</td></tr>
+                                    <tr><td><strong>BscScan — Timelock</strong></td><td><a href="https://testnet.bscscan.com/address/0xbb183061a7a88e08136611a7781cadBB3337212a#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Timelock + lệnh đang chờ</td></tr>
 
                                 </tbody>
                             </table>
                         </div>
-                        <p className="pdoc-text"><strong dangerouslySetInnerHTML={{ __html: t('smartContract.s8_6HowToVerifyTitle') }} /></p>
+                        <p className="pdoc-text"><strong>Cách verify trên BscScan:</strong></p>
                         <ol className="pdoc-steps">
-                            <li className="pdoc-step"><span className="pdoc-step-num">1</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_6Step1') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">2</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_6Step2') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">3</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_6Step3') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">4</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_6Step4') }} /></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">1</span><span className="pdoc-step-text">Mở BscScan → Tab <strong>Contract</strong></span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">2</span><span className="pdoc-step-text">Xem biểu tượng <strong>✅ xanh</strong> = code verified khớp 100%</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">3</span><span className="pdoc-step-text"><strong>Read Contract</strong> → xem giá trị hiện tại (fee, LTV...)</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">4</span><span className="pdoc-step-text"><strong>Events</strong> → xem lịch sử mọi thay đổi</span></li>
                         </ol>
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s8_7Title')}</h3>
-                        <p className="pdoc-text">{t('smartContract.s8_7Text')}</p>
+                        <h3 className="pdoc-subtitle">8.7 Nâng cấp logic code — Deploy contract mới</h3>
+                        <p className="pdoc-text">Khi cần thay đổi <strong>logic code</strong>, phải deploy V3 mới và migrate:</p>
                         <ol className="pdoc-steps">
-                            <li className="pdoc-step"><span className="pdoc-step-num">1</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_7S1') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">2</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_7S2') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">3</span><span className="pdoc-step-text">{t('smartContract.s8_7S3')}</span></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">4</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_7S4') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">5</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_7S5') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">6</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_7S6') }} /></li>
-                            <li className="pdoc-step"><span className="pdoc-step-num">7</span><span className="pdoc-step-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s8_7S7') }} /></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">1</span><span className="pdoc-step-text"><strong>Audit + Test</strong> — Review code V3, chạy Slither + Mythril, test trên BSC Testnet</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">2</span><span className="pdoc-step-text"><strong>Thông báo 7+ ngày</strong> — Post lên Discord/Telegram/Twitter. Công khai source code V3</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">3</span><span className="pdoc-step-text"><strong>Deploy V3</strong> lên Mainnet</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">4</span><span className="pdoc-step-text"><strong>Pause V2 qua Timelock</strong> — Schedule pause → Chờ 48h → Execute. User có 48h burn + rút BNB</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">5</span><span className="pdoc-step-text"><strong>Snapshot positions</strong> — Đọc <code>positions[user]</code> cho mọi user từ V2</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">6</span><span className="pdoc-step-text"><strong>User tự migrate</strong> — Burn COW V2 → rút BNB → mint COW V3</span></li>
+                            <li className="pdoc-step"><span className="pdoc-step-num">7</span><span className="pdoc-step-text"><strong>Update frontend</strong> — Cập nhật <code>cowConfig.ts</code> → Deploy → Thông báo hoàn tất</span></li>
                         </ol>
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s8_8Title')}</h3>
+                        <h3 className="pdoc-subtitle">8.8 Script Migration — Snapshot dữ liệu</h3>
                         <CodeBlock lang="typescript">{`// scripts/snapshot-v2.ts
 import { ethers } from "hardhat";
 
 async function main() {
-    const V2 = "0xd1f43Dd4Ef60492DA2F777e424654411176b0FDA";
+    const V2 = "0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd";
     const v2 = await ethers.getContractAt("COWToken", V2);
 
     // Lấy danh sách user qua event logs
@@ -810,15 +810,15 @@ async function main() {
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">{t('smartContract.s8_9Title')}</h3>
+                        <h3 className="pdoc-subtitle">8.9 Tương lai — Proxy Upgradeable Pattern</h3>
                         <div className="pdoc-table-wrapper">
                             <table className="pdoc-table">
-                                <thead><tr><th>{t('smartContract.s8_9H_pattern')}</th><th>{t('smartContract.s8_9H_pros')}</th><th>{t('smartContract.s8_9H_cons')}</th></tr></thead>
+                                <thead><tr><th>Pattern</th><th>Ưu điểm</th><th>Nhược điểm</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>{t('smartContract.s8_9R1_pattern')}</strong></td><td>{t('smartContract.s8_9R1_pros')}</td><td>{t('smartContract.s8_9R1_cons')}</td></tr>
-                                    <tr><td><strong>{t('smartContract.s8_9R2_pattern')}</strong></td><td>{t('smartContract.s8_9R2_pros')}</td><td>{t('smartContract.s8_9R2_cons')}</td></tr>
-                                    <tr><td><strong>{t('smartContract.s8_9R3_pattern')}</strong></td><td>{t('smartContract.s8_9R3_pros')}</td><td>{t('smartContract.s8_9R3_cons')}</td></tr>
-                                    <tr><td><strong>{t('smartContract.s8_9R4_pattern')}</strong></td><td>{t('smartContract.s8_9R4_pros')}</td><td>{t('smartContract.s8_9R4_cons')}</td></tr>
+                                    <tr><td><strong>Non-upgradeable (hiện tại)</strong></td><td>Đơn giản, dễ audit, trust tuyệt đối</td><td>Migration phức tạp khi nâng cấp</td></tr>
+                                    <tr><td><strong>UUPS Proxy</strong></td><td>Upgrade dễ, giữ nguyên address</td><td>Phức tạp hơn, risk nếu logic sai</td></tr>
+                                    <tr><td><strong>Transparent Proxy</strong></td><td>Admin/user tách biệt, an toàn</td><td>Gas cao hơn, cần proxy admin</td></tr>
+                                    <tr><td><strong>Diamond (EIP-2535)</strong></td><td>Modular, upgrade từng phần</td><td>Rất phức tạp, khó audit</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1123,7 +1123,9 @@ console.log("Constructor Args (hex):", encoded);`}</CodeBlock>
 
                     {/* Footer */}
                     <div className="pdoc-footer">
-                        <p className="pdoc-footer-text" dangerouslySetInnerHTML={{ __html: t('smartContract.pageFooter') }} />
+                        <p className="pdoc-footer-text">
+                            📝 Smart Contract Guide cập nhật lần cuối: <strong>14/03/2026</strong> &nbsp;·&nbsp; © 2026 TokenDev Development Team
+                        </p>
                     </div>
                 </main>
             </div>

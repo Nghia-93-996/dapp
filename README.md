@@ -23,10 +23,10 @@ COW is a **collateralized reserve token** where every token is backed by BNB in 
 
 | Contract | Address | Explorer |
 |----------|---------|----------|
-| **COWToken** | `0x2A91d3351976140141aCCF5113334F824d8f8c11` | [View on BscScan](https://testnet.bscscan.com/address/0x2A91d3351976140141aCCF5113334F824d8f8c11) |
-| **COWTimelock** | `0x83a678dFDB1EAA2eC6b2989E7201d957e5cC7B30` | [View on BscScan](https://testnet.bscscan.com/address/0x83a678dFDB1EAA2eC6b2989E7201d957e5cC7B30) |
+| **COWToken** | `0xd1f43Dd4Ef60492DA2F777e424654411176b0FDA` | [View on BscScan](https://testnet.bscscan.com/address/0xd1f43Dd4Ef60492DA2F777e424654411176b0FDA) |
+| **COWTimelock** | `0xE81ff03d5Da09eaa843B8E0ef60C7f357F858B58` | [View on BscScan](https://testnet.bscscan.com/address/0xE81ff03d5Da09eaa843B8E0ef60C7f357F858B58) |
 
-**Fee Collector**: `0x65E8c1434E348EE409A0d6488b9e293C3fFdd998`
+**Fee Collector**: `0xb0a5A0b9bFf9433958006826372198a4e74c5802`
 
 | Parameter | Value |
 |-----------|-------|

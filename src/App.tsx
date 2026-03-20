@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useWalletContext } from './hooks/WalletContext';
 import { useCOWContract } from './hooks/useCOWContract';
+import { useCOWPrice } from './hooks/useCOWPrice';
 import { useTransactionHistory } from './hooks/useTransactionHistory';
 import { toast } from 'react-toastify';
 import { WalletButton } from './components/WalletButton';
@@ -34,6 +35,8 @@ function App() {
     wallet.chainId ?? null,
     wallet.address,
   );
+
+  const { cowPriceUsd } = useCOWPrice();
 
   const txHistory = useTransactionHistory(
     wallet.provider,
@@ -310,6 +313,20 @@ function App() {
                     </span>
                   </div>
                 </div>
+
+                <div className="rate-divider" />
+
+                <div className="hero-rate cow-rate">
+                  <div className="rate-icon cow-rate-icon">
+                    <span className="cow-logo">🐄</span>
+                  </div>
+                  <div className="rate-info">
+                    <span className="rate-label">COW/USD</span>
+                    <span className="rate-value">
+                      <strong>${cowPriceUsd.toFixed(4)}</strong>
+                    </span>
+                  </div>
+                </div>
               </div>
             );
           })()}
@@ -323,6 +340,7 @@ function App() {
             address={wallet.address}
             getNetworkName={getNetworkName}
             cowBalance={cowContract.cowBalance}
+            cowPriceUsd={cowPriceUsd}
           />
         )}
 
@@ -343,12 +361,13 @@ function App() {
           mintFeeBps={cowContract.mintFeeBps}
           burnFeeBps={cowContract.burnFeeBps}
           bnbBalance={wallet.balance}
+          cowPriceUsd={cowPriceUsd}
           onTransactionComplete={() => { cowContract.refresh(); txHistory.refresh(); }}
         />
 
         {/* Treasury Dashboard */}
         {wallet.isConnected && (
-          <TreasuryDashboard cowState={cowContract} chainId={wallet.chainId ?? null} />
+          <TreasuryDashboard cowState={cowContract} chainId={wallet.chainId ?? null} cowPriceUsd={cowPriceUsd} />
         )}
 
         {/* Transaction History */}

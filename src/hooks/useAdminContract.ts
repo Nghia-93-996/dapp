@@ -28,11 +28,17 @@ export interface AdminState {
   isLoading: boolean;
 }
 
-const KNOWN_OWNER = '0xE81ff03d5Da09eaa843B8E0ef60C7f357F858B58';
+// ─── Constants ─────────────────────────────────────────────────────
+
+/** Timelock address (owner of COWToken after deployment) */
+const KNOWN_OWNER = '0xbb183061a7a88e08136611a7781cadBB3337212a';
+
+/** Deployer / priceUpdater — authorized to call setCOWPrice directly */
 const CONTRACT_CREATOR = '0xb0a5A0b9bFf9433958006826372198a4e74c5802';
+
 const STORAGE_KEY = 'cow-timelock-ops';
 
-const defaultAdminState: AdminState = {
+const DEFAULT_ADMIN_STATE: AdminState = {
   isOwner: false,
   ownerAddress: KNOWN_OWNER,
   isPaused: false,
@@ -40,6 +46,8 @@ const defaultAdminState: AdminState = {
   treasury2: '',
   isLoading: false,
 };
+
+const OPS_REFRESH_INTERVAL_MS = 30_000;
 
 // ─── localStorage helpers ──────────────────────────────────────────
 
@@ -54,6 +62,23 @@ function saveOps(chainId: string, ops: TimelockOp[]) {
   localStorage.setItem(`${STORAGE_KEY}-${chainId}`, JSON.stringify(ops));
 }
 
+// ─── Helpers ───────────────────────────────────────────────────────
+
+/** Check if a user address matches the contract owner or deployer/creator */
+function isAuthorizedAdmin(userAddress: string, ownerAddress: string): boolean {
+  const user = userAddress.toLowerCase();
+  return (
+    (!!ownerAddress && user === ownerAddress.toLowerCase()) ||
+    user === CONTRACT_CREATOR.toLowerCase()
+  );
+}
+
+/** Extract value from a settled promise result with fallback */
+function settledValue<T>(settled: PromiseSettledResult<T>[], index: number, fallback: T): T {
+  const result = settled[index];
+  return result.status === 'fulfilled' ? result.value : fallback;
+}
+
 // ─── Hook ──────────────────────────────────────────────────────────
 
 export function useAdminContract(
@@ -61,12 +86,13 @@ export function useAdminContract(
   chainId: string | null,
   userAddress: string | null
 ) {
-  const [state, setState] = useState<AdminState>(defaultAdminState);
+  const [state, setState] = useState<AdminState>(DEFAULT_ADMIN_STATE);
   const [pendingOps, setPendingOps] = useState<TimelockOp[]>([]);
   const refreshInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // ── Contract getters ──
+  // ── Contract factories ──
 
+  /** Read-only COWToken contract */
   const getCowContract = useCallback(() => {
     if (!provider || !chainId) return null;
     const address = getCOWTokenAddress(chainId);
@@ -74,6 +100,16 @@ export function useAdminContract(
     return new Contract(address, COW_TOKEN_ABI, provider);
   }, [provider, chainId]);
 
+  /** Signed COWToken contract (for direct calls like setCOWPrice) */
+  const getSignedCowContract = useCallback(async () => {
+    if (!provider || !chainId) return null;
+    const address = getCOWTokenAddress(chainId);
+    if (!address) return null;
+    const signer = await provider.getSigner();
+    return new Contract(address, COW_TOKEN_ABI, signer);
+  }, [provider, chainId]);
+
+  /** Signed Timelock contract */
   const getSignedTimelock = useCallback(async () => {
     if (!provider || !chainId) return null;
     const address = getTimelockAddress(chainId);
@@ -82,6 +118,7 @@ export function useAdminContract(
     return new Contract(address, TIMELOCK_ABI, signer);
   }, [provider, chainId]);
 
+  /** Read-only Timelock contract */
   const getReadTimelock = useCallback(() => {
     if (!provider || !chainId) return null;
     const address = getTimelockAddress(chainId);
@@ -93,7 +130,7 @@ export function useAdminContract(
 
   const refresh = useCallback(async () => {
     if (!isCOWChainSupported(chainId) || !provider) {
-      setState(defaultAdminState);
+      setState(DEFAULT_ADMIN_STATE);
       return;
     }
 
@@ -110,21 +147,13 @@ export function useAdminContract(
         contract.treasury2(),
       ]);
 
-      const val = <T,>(i: number, fallback: T): T =>
-        settled[i].status === 'fulfilled' ? (settled[i] as PromiseFulfilledResult<T>).value : fallback;
-
-      const ownerAddress = val<string>(0, '');
-      const isPaused = val<boolean>(1, false);
-      const feeCollector = val<string>(2, '');
-      const treasury2 = val<string>(3, '');
-
-      const isOwner = !!userAddress && (
-        (!!ownerAddress && userAddress.toLowerCase() === ownerAddress.toLowerCase()) ||
-        userAddress.toLowerCase() === CONTRACT_CREATOR.toLowerCase()
-      );
+      const ownerAddress  = settledValue<string>(settled, 0, '');
+      const isPaused      = settledValue<boolean>(settled, 1, false);
+      const feeCollector  = settledValue<string>(settled, 2, '');
+      const treasury2     = settledValue<string>(settled, 3, '');
 
       setState({
-        isOwner,
+        isOwner: !!userAddress && isAuthorizedAdmin(userAddress, ownerAddress),
         ownerAddress,
         isPaused,
         feeCollector,
@@ -149,8 +178,8 @@ export function useAdminContract(
     const timelock = getReadTimelock();
     if (!timelock) { setPendingOps(ops); return; }
 
-    // Update statuses from chain
     const updated: TimelockOp[] = [];
+
     for (const op of ops) {
       try {
         const [isDone, isReady, isPending] = await Promise.all([
@@ -158,14 +187,16 @@ export function useAdminContract(
           timelock.isOperationReady(op.id),
           timelock.isOperationPending(op.id),
         ]);
-        if (isDone) { op.status = 'done'; }
-        else if (isReady) { op.status = 'ready'; }
-        else if (isPending) { op.status = 'pending'; }
-        else { op.status = 'cancelled'; }
+
+        if (isDone) op.status = 'done';
+        else if (isReady) op.status = 'ready';
+        else if (isPending) op.status = 'pending';
+        else op.status = 'cancelled';
       } catch (err) {
         console.warn('[Timelock] Status check failed for', op.id, err);
       }
-      // Keep non-done, non-cancelled ops
+
+      // Keep active ops only
       if (op.status !== 'done' && op.status !== 'cancelled') {
         updated.push(op);
       }
@@ -177,14 +208,14 @@ export function useAdminContract(
 
   useEffect(() => { refreshOps(); }, [refreshOps]);
 
-  // Auto-refresh ops every 30s
+  // Auto-refresh ops periodically
   useEffect(() => {
     if (refreshInterval.current) clearInterval(refreshInterval.current);
-    refreshInterval.current = setInterval(refreshOps, 30_000);
+    refreshInterval.current = setInterval(refreshOps, OPS_REFRESH_INTERVAL_MS);
     return () => { if (refreshInterval.current) clearInterval(refreshInterval.current); };
   }, [refreshOps]);
 
-  // ── Timelock: Schedule operation ──
+  // ── Timelock: Schedule → Execute → Cancel ──
 
   const scheduleOp = useCallback(async (functionName: string, args: unknown[]): Promise<string> => {
     if (!chainId) throw new Error('No chain connected');
@@ -214,18 +245,10 @@ export function useAdminContract(
       )
     );
 
-    // Send schedule transaction
-    const tx = await timelock.schedule(
-      cowAddr,
-      0,
-      calldata,
-      ZeroHash,
-      salt,
-      TIMELOCK_MIN_DELAY
-    );
+    const tx = await timelock.schedule(cowAddr, 0, calldata, ZeroHash, salt, TIMELOCK_MIN_DELAY);
     await tx.wait();
 
-    // Save to localStorage
+    // Persist to localStorage
     const now = Date.now();
     const newOp: TimelockOp = {
       id: operationId,
@@ -238,15 +261,12 @@ export function useAdminContract(
       status: 'pending',
     };
 
-    const ops = loadOps(chainId);
-    ops.push(newOp);
+    const ops = [...loadOps(chainId), newOp];
     saveOps(chainId, ops);
     setPendingOps(ops);
 
     return tx.hash;
   }, [chainId, getSignedTimelock]);
-
-  // ── Timelock: Execute operation ──
 
   const executeOp = useCallback(async (op: TimelockOp): Promise<string> => {
     if (!chainId) throw new Error('No chain connected');
@@ -256,20 +276,12 @@ export function useAdminContract(
     const timelock = await getSignedTimelock();
     if (!timelock) throw new Error('Timelock contract not available');
 
-    // Verify operation is ready
     const isReady = await timelock.isOperationReady(op.id);
     if (!isReady) throw new Error('Operation not ready yet. Please wait for the timelock delay.');
 
-    const tx = await timelock.execute(
-      cowAddr,
-      0,
-      op.calldata,
-      ZeroHash,
-      op.salt
-    );
+    const tx = await timelock.execute(cowAddr, 0, op.calldata, ZeroHash, op.salt);
     await tx.wait();
 
-    // Remove from localStorage
     const ops = loadOps(chainId).filter(o => o.id !== op.id);
     saveOps(chainId, ops);
     setPendingOps(ops);
@@ -278,8 +290,6 @@ export function useAdminContract(
     return tx.hash;
   }, [chainId, getSignedTimelock, refresh]);
 
-  // ── Timelock: Cancel operation ──
-
   const cancelOp = useCallback(async (op: TimelockOp): Promise<string> => {
     const timelock = await getSignedTimelock();
     if (!timelock || !chainId) throw new Error('Timelock not available');
@@ -287,7 +297,6 @@ export function useAdminContract(
     const tx = await timelock.cancel(op.id);
     await tx.wait();
 
-    // Remove from localStorage
     const ops = loadOps(chainId).filter(o => o.id !== op.id);
     saveOps(chainId, ops);
     setPendingOps(ops);
@@ -295,47 +304,45 @@ export function useAdminContract(
     return tx.hash;
   }, [chainId, getSignedTimelock]);
 
-  // ── Convenience wrappers (schedule through Timelock) ──
+  // ── Timelocked admin actions (48h delay) ──
 
-  const setMintFee = useCallback((bps: number) =>
-    scheduleOp('setMintFee', [bps]), [scheduleOp]);
+  const setMintFee              = useCallback((bps: number) => scheduleOp('setMintFee', [bps]), [scheduleOp]);
+  const setBurnFee              = useCallback((bps: number) => scheduleOp('setBurnFee', [bps]), [scheduleOp]);
+  const setSpreadBps            = useCallback((bps: number) => scheduleOp('setSpreadBps', [bps]), [scheduleOp]);
+  const setLtv                  = useCallback((bps: number) => scheduleOp('setLtv', [bps]), [scheduleOp]);
+  const setLiquidationThreshold = useCallback((bps: number) => scheduleOp('setLiquidationThreshold', [bps]), [scheduleOp]);
+  const setFeeCollector         = useCallback((addr: string) => scheduleOp('setFeeCollector', [addr]), [scheduleOp]);
+  const setTreasury2            = useCallback((addr: string) => scheduleOp('setTreasury2', [addr]), [scheduleOp]);
+  const setPriceFeed            = useCallback((addr: string) => scheduleOp('setPriceFeed', [addr]), [scheduleOp]);
+  const pause                   = useCallback(() => scheduleOp('pause', []), [scheduleOp]);
+  const unpause                 = useCallback(() => scheduleOp('unpause', []), [scheduleOp]);
 
-  const setBurnFee = useCallback((bps: number) =>
-    scheduleOp('setBurnFee', [bps]), [scheduleOp]);
+  // ── Direct admin actions (no Timelock delay) ──
 
-  const setSpreadBps = useCallback((bps: number) =>
-    scheduleOp('setSpreadBps', [bps]), [scheduleOp]);
+  /** Update COW/USD price — calls contract directly via priceUpdater role (instant) */
+  const setCOWPrice = useCallback(async (priceUsd8Decimals: bigint): Promise<string> => {
+    const contract = await getSignedCowContract();
+    if (!contract) throw new Error('COWToken contract not available');
 
-  const setLtv = useCallback((bps: number) =>
-    scheduleOp('setLtv', [bps]), [scheduleOp]);
+    const tx = await contract.setCOWPrice(priceUsd8Decimals);
+    await tx.wait();
+    await refresh();
+    return tx.hash;
+  }, [getSignedCowContract, refresh]);
 
-  const setLiquidationThreshold = useCallback((bps: number) =>
-    scheduleOp('setLiquidationThreshold', [bps]), [scheduleOp]);
-
-  const setFeeCollector = useCallback((address: string) =>
-    scheduleOp('setFeeCollector', [address]), [scheduleOp]);
-
-  const setTreasury2 = useCallback((address: string) =>
-    scheduleOp('setTreasury2', [address]), [scheduleOp]);
-
-  const setPriceFeed = useCallback((address: string) =>
-    scheduleOp('setPriceFeed', [address]), [scheduleOp]);
-
-  const pause = useCallback(() =>
-    scheduleOp('pause', []), [scheduleOp]);
-
-  const unpause = useCallback(() =>
-    scheduleOp('unpause', []), [scheduleOp]);
+  // ── Return ──
 
   return {
     ...state,
     refresh,
-    // Timelock operations
+
+    // Timelock ops management
     pendingOps,
     refreshOps,
     executeOp,
     cancelOp,
-    // Schedule wrappers (same API names as before)
+
+    // Timelocked admin actions (48h delay)
     setMintFee,
     setBurnFee,
     setSpreadBps,
@@ -346,5 +353,8 @@ export function useAdminContract(
     setPriceFeed,
     pause,
     unpause,
+
+    // Direct admin actions (instant)
+    setCOWPrice,
   };
 }

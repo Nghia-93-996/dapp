@@ -164,8 +164,8 @@ export default function DocumentationPage() {
                             <table className="pdoc-table">
                                 <thead><tr><th>Contract</th><th>Địa chỉ</th><th>Explorer</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>COWToken</strong></td><td><code>0xd1f43Dd4Ef60492DA2F777e424654411176b0FDA</code></td><td><a href="https://testnet.bscscan.com/address/0xd1f43Dd4Ef60492DA2F777e424654411176b0FDA" target="_blank" rel="noopener noreferrer">Xem trên BscScan</a></td></tr>
-                                    <tr><td><strong>COWTimelock</strong></td><td><code>0xE81ff03d5Da09eaa843B8E0ef60C7f357F858B58</code></td><td><a href="https://testnet.bscscan.com/address/0xE81ff03d5Da09eaa843B8E0ef60C7f357F858B58" target="_blank" rel="noopener noreferrer">Xem trên BscScan</a></td></tr>
+                                    <tr><td><strong>COWToken</strong></td><td><code>0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd</code></td><td><a href="https://testnet.bscscan.com/address/0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd" target="_blank" rel="noopener noreferrer">Xem trên BscScan</a></td></tr>
+                                    <tr><td><strong>COWTimelock</strong></td><td><code>0xbb183061a7a88e08136611a7781cadBB3337212a</code></td><td><a href="https://testnet.bscscan.com/address/0xbb183061a7a88e08136611a7781cadBB3337212a" target="_blank" rel="noopener noreferrer">Xem trên BscScan</a></td></tr>
                                     <tr><td><strong>Fee Collector</strong></td><td><code>0xb0a5A0b9bFf9433958006826372198a4e74c5802</code></td><td>—</td></tr>
                                 </tbody>
                             </table>

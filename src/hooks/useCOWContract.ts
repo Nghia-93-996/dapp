@@ -39,6 +39,8 @@ export interface COWContractState {
     backingRatio: string;
     /** Whether contract is paused */
     isPaused: boolean;
+    /** COW/USD on-chain price (formatted, 8 decimals → human-readable USD) */
+    cowPriceUsd: string;
     /** Contract address */
     contractAddress: string | null;
     /** Loading state */
@@ -60,6 +62,7 @@ const defaultState: COWContractState = {
     bnbPrice: '0',
     backingRatio: '1.000',
     isPaused: false,
+    cowPriceUsd: '0',
     contractAddress: null,
     isLoading: false,
     userPosition: null,
@@ -136,17 +139,12 @@ export function useCOWContract(
                 }
             }
 
-            // 2) Fetch V2 contract metadata (each call independent — one failure won't zero others)
-            let totalCollateral = 0n;
-            let totalSupply = 0n;
-            let mintFeeBps = 0n;
-            let burnFeeBps = 0n;
-            let spreadBps = 0n;
-            let ltvBps = 0n;
-            let liquidationThreshold = 0n;
-            let backingRatio = 0n;
-            let isPaused = false;
-            let bnbPrice = 0n;
+            // 2) Fetch V2 contract metadata (each independent — one failure won't zero others)
+            const FIELD_NAMES = [
+                'totalCollateral', 'totalSupply', 'mintFeeBps', 'burnFeeBps',
+                'spreadBps', 'ltvBps', 'liquidationThreshold', 'backingRatio',
+                'paused', 'getBNBPrice', 'cowPriceUsd',
+            ] as const;
 
             const settled = await Promise.allSettled([
                 contract.totalCollateral(),       // 0
@@ -158,29 +156,29 @@ export function useCOWContract(
                 contract.liquidationThreshold(),   // 6
                 contract.backingRatio(),           // 7
                 contract.paused(),                 // 8
-                contract.getBNBPrice(),             // 9
+                contract.getBNBPrice(),            // 9
+                contract.cowPriceUsd(),            // 10
             ]);
 
             const val = <T,>(i: number, fallback: T): T =>
                 settled[i].status === 'fulfilled' ? (settled[i] as PromiseFulfilledResult<T>).value : fallback;
 
-            totalCollateral     = val<bigint>(0, 0n);
-            totalSupply         = val<bigint>(1, 0n);
-            mintFeeBps          = val<bigint>(2, 0n);
-            burnFeeBps          = val<bigint>(3, 0n);
-            spreadBps           = val<bigint>(4, 0n);
-            ltvBps              = val<bigint>(5, 0n);
-            liquidationThreshold = val<bigint>(6, 0n);
-            backingRatio        = val<bigint>(7, 0n);
-            isPaused            = val<boolean>(8, false);
-            bnbPrice            = val<bigint>(9, 0n);
+            const totalCollateral      = val<bigint>(0, 0n);
+            const totalSupply          = val<bigint>(1, 0n);
+            const mintFeeBps           = val<bigint>(2, 0n);
+            const burnFeeBps           = val<bigint>(3, 0n);
+            const spreadBps            = val<bigint>(4, 0n);
+            const ltvBps               = val<bigint>(5, 0n);
+            const liquidationThreshold = val<bigint>(6, 0n);
+            const backingRatio         = val<bigint>(7, 0n);
+            const isPaused             = val<boolean>(8, false);
+            const bnbPrice             = val<bigint>(9, 0n);
+            const cowPriceRaw          = val<bigint>(10, 0n);
 
             // Log any failed calls for debugging
             settled.forEach((r, i) => {
                 if (r.status === 'rejected') {
-                    const names = ['totalCollateral', 'totalSupply', 'mintFeeBps', 'burnFeeBps',
-                        'spreadBps', 'ltvBps', 'liquidationThreshold', 'backingRatio', 'paused', 'getBNBPrice'];
-                    console.warn(`[COW] Failed to fetch ${names[i]}:`, r.reason);
+                    console.warn(`[COW] Failed to fetch ${FIELD_NAMES[i]}:`, r.reason);
                 }
             });
 
@@ -203,8 +201,9 @@ export function useCOWContract(
                 ltvBps: Number(ltvBps),
                 liquidationThreshold: Number(liquidationThreshold),
                 bnbPrice: formatUnits(bnbPrice, 8),
-                backingRatio: bnbPrice > 0n ? (Number(formatEther(backingRatio))).toFixed(4) : '1.000',
+                backingRatio: bnbPrice > 0n ? Number(formatEther(backingRatio)).toFixed(4) : '1.000',
                 isPaused,
+                cowPriceUsd: formatUnits(cowPriceRaw, 8),
                 contractAddress,
                 isLoading: false,
                 userPosition,

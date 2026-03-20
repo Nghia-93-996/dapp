@@ -24,6 +24,8 @@ export const COW_TOKEN_ABI = [
     "function backingRatio() view returns (uint256)",
     "function paused() view returns (bool)",
     "function owner() view returns (address)",
+    "function cowPriceUsd() view returns (uint256)",
+    "function priceUpdater() view returns (address)",
 
     // ── V2: Oracle & Positions ──
     "function getBNBPrice() view returns (uint256)",
@@ -46,6 +48,8 @@ export const COW_TOKEN_ABI = [
     "function setFeeCollector(address _feeCollector)",
     "function setTreasury2(address _treasury2)",
     "function setPriceFeed(address _priceFeed)",
+    "function setCOWPrice(uint256 _cowPriceUsd)",
+    "function setPriceUpdater(address _priceUpdater)",
     "function pause()",
     "function unpause()",
     "function transferOwnership(address newOwner)",
@@ -54,6 +58,7 @@ export const COW_TOKEN_ABI = [
     "event Minted(address indexed user, uint256 bnbDeposited, uint256 tokensReceived, uint256 spreadFee, uint256 mintFee, uint256 bnbPriceUsd)",
     "event Burned(address indexed user, uint256 tokensBurned, uint256 bnbReturned, uint256 spreadFee, uint256 burnFee, uint256 bnbPriceUsd)",
     "event Liquidated(address indexed user, address indexed liquidator, uint256 collateralSeized, uint256 debtRepaid, uint256 penalty, uint256 bnbPriceUsd)",
+    "event CowPriceUpdated(uint256 oldPrice, uint256 newPrice)",
 ] as const;
 
 /**
@@ -62,7 +67,7 @@ export const COW_TOKEN_ABI = [
  */
 export const COW_TOKEN_ADDRESSES: Record<string, string> = {
     // BSC Testnet (chain 97 = 0x61)
-    '0x61': '0x2A91d3351976140141aCCF5113334F824d8f8c11',
+    '0x61': '0xDAe2E7d409cfeAE97239F5661ca32E94436C5FDd',
     // BSC Mainnet (chain 56 = 0x38)
     // '0x38': '0x...',
 };
@@ -108,7 +113,7 @@ export const TIMELOCK_ABI = [
  */
 export const TIMELOCK_ADDRESSES: Record<string, string> = {
     // BSC Testnet (chain 97 = 0x61)
-    '0x61': '0x83a678dFDB1EAA2eC6b2989E7201d957e5cC7B30',
+    '0x61': '0xbb183061a7a88e08136611a7781cadBB3337212a',
     // BSC Mainnet (chain 56 = 0x38)
     // '0x38': '0x...',
 };

@@ -9,9 +9,10 @@ interface WalletStatsProps {
     address: string | null;
     getNetworkName: (chainId: string | null) => string;
     cowBalance?: string;
+    cowPriceUsd?: number;
 }
 
-export function WalletStats({ balance, chainId, address, getNetworkName, cowBalance }: WalletStatsProps) {
+export function WalletStats({ balance, chainId, address, getNetworkName, cowBalance, cowPriceUsd }: WalletStatsProps) {
     const { t } = useTranslation();
 
     if (!address) return null;
@@ -37,7 +38,7 @@ export function WalletStats({ balance, chainId, address, getNetworkName, cowBala
                 {
                     label: 'COW Balance',
                     value: cowBalance
-                        ? `${parseFloat(cowBalance).toFixed(4)} COW`
+                        ? `${parseFloat(cowBalance).toFixed(4)} COW ≈ $${(parseFloat(cowBalance) * (cowPriceUsd ?? 1)).toFixed(2)}`
                         : '0.0000 COW',
                     icon: (
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

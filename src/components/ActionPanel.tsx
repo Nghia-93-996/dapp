@@ -24,6 +24,7 @@ interface ActionPanelProps {
     mintFeeBps?: number;
     burnFeeBps?: number;
     bnbBalance?: string | null;
+    cowPriceUsd?: number;
     onTransactionComplete?: () => void;
 }
 
@@ -43,6 +44,7 @@ export function ActionPanel({
     mintFeeBps,
     burnFeeBps,
     bnbBalance,
+    cowPriceUsd,
     onTransactionComplete,
 }: ActionPanelProps) {
     const { t } = useTranslation();
@@ -326,7 +328,7 @@ export function ActionPanel({
                         <div className="action-preview">
                             <div className="preview-row">
                                 <span>{t('action.youReceive', 'You receive')}</span>
-                                <span className="preview-value">{formatPreview(effectiveMintPreview.tokensOut)} COW</span>
+                                <span className="preview-value">{formatPreview(effectiveMintPreview.tokensOut)} COW ≈ ${(parseFloat(effectiveMintPreview.tokensOut) * (cowPriceUsd ?? 1)).toFixed(2)}</span>
                             </div>
                             <div className="preview-row">
                                 <span>{t('action.spreadFee', 'Spread (1%)')}</span>

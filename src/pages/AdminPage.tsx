@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useWalletContext } from '../hooks/WalletContext';
 import { useCOWContract } from '../hooks/useCOWContract';
 import { useAdminContract } from '../hooks/useAdminContract';
+import { useCOWPrice } from '../hooks/useCOWPrice';
 import type { TimelockOp } from '../hooks/useAdminContract';
 import { toast } from 'react-toastify';
 import { WalletButton } from '../components/WalletButton';
@@ -42,6 +43,7 @@ function friendlyName(fn: string): string {
     setFeeCollector: 'Set Fee Collector',
     setTreasury2: 'Set Treasury 2',
     setPriceFeed: 'Set Price Feed',
+    setCOWPrice: 'Set COW Price',
     pause: 'Pause Contract',
     unpause: 'Unpause Contract',
   };
@@ -102,6 +104,115 @@ function BpsCard({
           disabled={disabled || loading || !value}
         >
           {loading ? <span className="spinner" /> : '⏳ Schedule'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Sub-component: COW Price Card ────────────────── */
+function PriceCard({
+  title, desc, currentOnChain, onSubmit, disabled,
+}: {
+  title: string; desc: string; currentOnChain: string;
+  onSubmit: (priceRaw: bigint) => Promise<string>; disabled: boolean;
+}) {
+  const [value, setValue] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { cowPriceUsd: apiPrice, isLoading: apiLoading, error: apiError, lastUpdated, refresh: refreshApiPrice } = useCOWPrice();
+
+  const handleUseApiPrice = () => {
+    setValue(apiPrice.toFixed(4));
+  };
+
+  const handleSubmit = async () => {
+    const v = parseFloat(value);
+    if (isNaN(v) || v <= 0) {
+      toast.error('Price must be a positive number (e.g., 1.0012)');
+      return;
+    }
+    setLoading(true);
+    try {
+      const price8Decimals = BigInt(Math.round(v * 1e8));
+      const hash = await onSubmit(price8Decimals);
+      toast.success(`✅ Price updated! TX: ${hash.slice(0, 10)}…`);
+      setValue('');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Transaction failed';
+      toast.error(`❌ ${msg.length > 80 ? msg.slice(0, 80) + '…' : msg}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="admin-card">
+      <div className="admin-card-header">
+        <span className="admin-card-title">{title}</span>
+        <span className="admin-card-current" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span style={{ color: '#60a5fa' }}>🔗 On-chain: <strong>${parseFloat(currentOnChain).toFixed(4)}</strong></span>
+          <span style={{ color: '#a78bfa' }}>
+            API: {apiLoading ? '…' : apiError ? '❌ Error' : `$${apiPrice.toFixed(4)}`}
+          </span>
+        </span>
+      </div>
+      <p className="admin-card-desc">{desc}</p>
+
+      {/* Live API Price Info */}
+      <div className="price-api-info" style={{
+        display: 'flex', alignItems: 'center', gap: 8,
+        padding: '8px 12px', borderRadius: 8,
+        background: 'rgba(139, 92, 246, 0.08)', border: '1px solid rgba(139, 92, 246, 0.15)',
+        marginBottom: 12, fontSize: '0.82rem',
+      }}>
+        <span style={{ color: '#a78bfa' }}>📡</span>
+        <span style={{ color: 'rgba(255,255,255,0.7)', flex: 1 }}>
+          Live from API: <strong style={{ color: apiError ? '#f87171' : '#34d399' }}>
+            {apiLoading ? 'Loading…' : apiError ? apiError : `$${apiPrice.toFixed(4)}`}
+          </strong>
+          {lastUpdated && (
+            <span style={{ marginLeft: 8, color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem' }}>
+              ({lastUpdated.toLocaleTimeString()})
+            </span>
+          )}
+        </span>
+        <button
+          className="admin-btn small"
+          onClick={refreshApiPrice}
+          disabled={apiLoading}
+          style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+        >
+          🔄 Refresh
+        </button>
+        <button
+          className="admin-btn small"
+          onClick={handleUseApiPrice}
+          disabled={apiLoading || !!apiError}
+          style={{ padding: '4px 10px', fontSize: '0.75rem', background: 'rgba(52, 211, 153, 0.2)', borderColor: 'rgba(52, 211, 153, 0.3)' }}
+        >
+          ⬇ Use This Price
+        </button>
+      </div>
+
+      <div className="admin-input-group">
+        <span className="admin-input-prefix">$</span>
+        <input
+          type="number"
+          className="admin-input"
+          placeholder="1.0012"
+          value={value}
+          onChange={e => setValue(e.target.value)}
+          step="0.0001"
+          min={0}
+          disabled={disabled || loading}
+        />
+        <span className="admin-input-suffix">USD</span>
+        <button
+          className="admin-btn"
+          onClick={handleSubmit}
+          disabled={disabled || loading || !value}
+        >
+          {loading ? <span className="spinner" /> : '🚀 Update Now'}
         </button>
       </div>
     </div>
@@ -535,6 +646,12 @@ export default function AdminPage() {
                   <span className="status-label">BNB Price</span>
                   <span className="status-value">${parseFloat(cowContract.bnbPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
+                <div className="status-item">
+                  <span className="status-label">COW Price (On-chain)</span>
+                  <span className="status-value" style={{ color: '#60a5fa', fontWeight: 600 }}>
+                    ${parseFloat(cowContract.cowPriceUsd).toFixed(4)}
+                  </span>
+                </div>
               </div>
             </section>
 
@@ -594,6 +711,36 @@ export default function AdminPage() {
                   title="Liquidation Threshold" desc="Collateral ratio below which positions can be liquidated. Must be > 10000 bps (100%)."
                   current={cowContract.liquidationThreshold} max={30000}
                   onSubmit={admin.setLiquidationThreshold} disabled={isDisabled}
+                />
+              </div>
+            </section>
+
+            {/* ── COW Price Management ──────────────────── */}
+            <section className="admin-section">
+              <div className="admin-section-header">
+                <div className="admin-section-icon fees">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+                    <path d="M12 18V6" />
+                  </svg>
+                </div>
+                <h2 className="admin-section-title">COW Price Management</h2>
+              </div>
+              <div className="admin-note">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+                COW price is fetched from CoinGecko (tether) API. Use this to manually override the on-chain price.
+                Value is stored in 8 decimals (e.g., $1.0012 = 100120000 raw).
+              </div>
+              <div className="admin-cards-grid">
+                <PriceCard
+                  title="COW/USD Price"
+                  desc="Set the COW token price in USD. This updates instantly without Timelock delay."
+                  currentOnChain={cowContract.cowPriceUsd}
+                  onSubmit={admin.setCOWPrice}
+                  disabled={isDisabled}
                 />
               </div>
             </section>

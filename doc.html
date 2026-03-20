@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Contract COW - Documentation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --bg-card: #1a2236;
+      --bg-card-hover: #1e2a42;
+      --accent: #f59e0b;
+      --accent-glow: rgba(245, 158, 11, 0.15);
+      --accent-secondary: #10b981;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #1e293b;
+      --danger: #ef4444;
+      --info: #3b82f6;
+      --radius: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 56px;
+      padding: 48px 32px;
+      background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-secondary), var(--accent));
+    }
+
+    .header .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f59e0b, #fbbf24, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent), #d97706);
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 18px;
+      color: #0a0e17;
+      flex-shrink: 0;
+    }
+
+    .section-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+      transition: border-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(245, 158, 11, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card ul li {
+      position: relative;
+      padding: 8px 0 8px 28px;
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    .card ul li::before {
+      content: '→';
+      position: absolute;
+      left: 4px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .card ul li strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Result box */
+    .result-box {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .result-box .icon { font-size: 18px; }
+    .result-box p { margin: 0; color: var(--accent-secondary); font-weight: 500; font-size: 14px; }
+
+    /* Warning / Info boxes */
+    .alert {
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 20px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .alert-warning {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .alert-danger {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .alert-info {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .alert .alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .alert .alert-content { flex: 1; }
+    .alert .alert-content strong { display: block; margin-bottom: 4px; font-size: 14px; }
+    .alert .alert-content p { margin: 0; font-size: 14px; color: var(--text-secondary); }
+
+    /* Feature list (treasury) */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .feature-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: border-color 0.3s ease;
+    }
+
+    .feature-item:hover {
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-glow);
+      border-radius: 8px;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .feature-text h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .feature-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* Table */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead {
+      background: var(--bg-secondary);
+    }
+
+    th {
+      text-align: left;
+      padding: 14px 20px;
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 14px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tr:hover td {
+      background: rgba(245, 158, 11, 0.03);
+    }
+
+    td strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Code / tag */
+    code {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    /* Upgrade timeline */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent-secondary));
+      border-radius: 1px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 12px 0;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -25px;
+      top: 20px;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      border: 2px solid var(--bg-primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .timeline-item p {
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    .timeline-item strong {
+      color: var(--text-primary);
+    }
+
+    /* Strategy section */
+    .strategy-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .strategy-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: border-color 0.3s ease;
+    }
+
+    .strategy-card:hover {
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .strategy-card h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--accent-secondary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .strategy-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .container { padding: 20px 16px 60px; }
+      .header { padding: 32px 20px; }
+      .header h1 { font-size: 28px; }
+      .section-header h2 { font-size: 20px; }
+      .card { padding: 20px; }
+      th, td { padding: 10px 14px; }
+      .strategy-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="badge">📄 Technical Documentation</div>
+      <h1>Smart Contract COW</h1>
+      <p>Hệ thống token thế chấp phi tập trung — Collateralized On-chain Wealth</p>
+    </div>
+
+    <!-- Section 1: Mint -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">1</div>
+        <h2>Giai đoạn Mint (Tạo Token)</h2>
+      </div>
+
+      <div class="card">
+        <h3>🔹 User gửi tài sản</h3>
+        <p>Gửi tài sản thế chấp (ví dụ: USDT, ETH) vào Smart Contract của dự án.</p>
+        <p>Sử dụng hình thức <strong>THẾ CHẤP DÀNH CHO CRYPTO</strong> giống DAI — định giá <strong>70-80%</strong> tài sản COW và thanh lý tự động khi giá trị tài sản bị trượt giá quá mức cho phép.</p>
+      </div>
+
+      <div class="card">
+        <h3>⚙️ Smart Contract thực hiện</h3>
+        <ul>
+          <li>Kiểm tra số lượng tài sản nhận được + phí <strong>SPREAD</strong> + phí <strong>MINT</strong></li>
+          <li>Tự động gọi hàm <code>mint()</code> để tạo ra token mới tương ứng</li>
+          <li>Gửi token mới về ví User</li>
+        </ul>
+      </div>
+
+      <div class="result-box">
+        <span class="icon">✅</span>
+        <p>Tài sản thế chấp nằm an toàn trong hợp đồng, thanh khoản hệ thống tăng lên.</p>
+      </div>
+    </div>
+
+    <!-- Section 2: Burn -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">2</div>
+        <h2>Giai đoạn Burn (Rút tài sản)</h2>
+      </div>
+
+      <div class="card">
+        <h3>🔹 User gửi token</h3>
+        <p>Gửi token COW lại vào Smart Contract và gọi lệnh <code>burn</code>.</p>
+      </div>
+
+      <div class="card">
+        <h3>⚙️ Smart Contract thực hiện</h3>
+        <ul>
+          <li>Hủy (<strong>burn</strong>) số token đó khỏi tổng cung + gas + phí BURN</li>
+          <li>Tự động giải phóng (<strong>release</strong>) một lượng tài sản thế chấp tương ứng từ Kho bạc</li>
+          <li>Gửi tài sản thế chấp lại cho User</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Section 3: Treasury -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">3</div>
+        <h2>Kho Bạc (Treasury)</h2>
+      </div>
+
+      <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 15px;">
+        Sử dụng địa chỉ Smart Contract làm kho bạc — không có quyền rút dành cho Admin.
+      </p>
+
+      <div class="feature-grid">
+        <div class="feature-item">
+          <div class="feature-icon">📈</div>
+          <div class="feature-text">
+            <h4>Tự động mở rộng</h4>
+            <p>Kho bạc tự động phình to lên khi user mint token và thế chấp tài sản.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🔒</div>
+          <div class="feature-text">
+            <h4>Không có withdraw cho Admin</h4>
+            <p>Không có hàm rút tiền (withdraw) và in token dành cho Admin.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">💸</div>
+          <div class="feature-text">
+            <h4>Rút tiền qua Burn</h4>
+            <p>Chỉ có hàm rút tiền dành cho User khi họ burn token.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-text">
+            <h4>Cập nhật giá realtime</h4>
+            <p>Hàm quản lý, cập nhật giá tài sản theo thời gian thực.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⚖️</div>
+          <div class="feature-text">
+            <h4>Tính tỷ lệ thế chấp</h4>
+            <p>Hàm tính toán tỷ lệ thế chấp hiện tại của User. Nếu rơi xuống dưới ngưỡng (ví dụ 105%), tài sản sẽ bị thanh lý.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-text">
+            <h4>Thanh lý tự động</h4>
+            <p>Hàm thanh lý tài sản thế chấp tự động khi vi phạm ngưỡng.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Upgrade -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">4</div>
+        <h2>Nâng cấp Smart Contract</h2>
+      </div>
+
+      <div class="card">
+        <h3>🕐 Quy trình Timelock</h3>
+        <div class="timeline">
+          <div class="timeline-item">
+            <p>Gửi lệnh nâng cấp smart contract lên <strong>hệ thống chờ</strong>.</p>
+          </div>
+          <div class="timeline-item">
+            <p>Hệ thống sẽ treo lệnh đó trong vòng <strong>48h - 72h</strong>.</p>
+          </div>
+          <div class="timeline-item">
+            <p><strong>Hủy lệnh</strong> nếu phát hiện lỗ hổng hoặc sai sót.</p>
+          </div>
+          <div class="timeline-item">
+            <p>User có thể vào <strong>soi code</strong> + smart contract mới, đủ thời gian để Burn token và rút tài sản thế chấp trước khi code mới có hiệu lực.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-warning">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-content">
+          <strong>Chống Rug Pull</strong>
+          <p>CÔNG KHAI SOURCE CODE + SMART CONTRACT. User có quyền kiểm tra và rút tài sản trước khi code mới có hiệu lực.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Fee Structure -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">5</div>
+        <h2>Cơ cấu phí</h2>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Hạng mục</th>
+              <th>Chi tiết</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Kho bạc chính 1</strong></td>
+              <td>Sử dụng địa chỉ CONTRACT để lưu giữ tài sản. Loại bỏ quyền admin để tránh rug pull, scam.</td>
+            </tr>
+            <tr>
+              <td><strong>Spread (1%)</strong></td>
+              <td>Giá Mint COW chênh lệch 1% với Burn COW.<br><code>Spread = Giá Ask - Giá Bid</code></td>
+            </tr>
+            <tr>
+              <td><strong>Kho bạc 2</strong></td>
+              <td>Spread được chuyển sang kho bạc 2 do admin COW quản lý — dùng cho Dự Trữ, Xây dựng, phát triển công nghệ.</td>
+            </tr>
+            <tr>
+              <td><strong>Phí Mint</strong></td>
+              <td><code>0.3%</code> / 1 COW + gas fee (user chịu)</td>
+            </tr>
+            <tr>
+              <td><strong>Phí Burn</strong></td>
+              <td><code>0.3%</code> / 1 COW + gas fee (user chịu)</td>
+            </tr>
+            <tr>
+              <td><strong>Lợi nhuận phí</strong></td>
+              <td>Chuyển vào địa chỉ ví ADMIN + DEV của COW để duy trì đội ngũ và dự án.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div class="alert-content">
+          <strong>Lưu ý</strong>
+          <p>Phí mint/burn được thu 1 lần khi user MINT. Lợi nhuận sẽ được chuyển vào địa chỉ ví của ADMIN + DEV.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 6: Implementation -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">6</div>
+        <h2>Thực hiện</h2>
+      </div>
+
+      <div class="card">
+        <h3>🚀 Triển khai</h3>
+        <ul>
+          <li>Triển khai <strong>DApp + Smart Contract</strong> (mục kết nối ví có thể mở rộng thêm thư viện nhiều loại ví hơn).</li>
+          <li>Tích hợp trên web chính ở mục <strong>CONNECT WALLET</strong> (mở thêm chức năng Connect Wallet và đưa chức năng <strong>KHAI THÁC COWe</strong> xuống dưới).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Section 7: Strategy -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-number">7</div>
+        <h2>Chiến lược mở rộng</h2>
+      </div>
+
+      <div class="strategy-cards">
+        <div class="strategy-card">
+          <h4>🏗️ Smart Contract gốc</h4>
+          <p>Cần có 1 Smart Contract gốc chuẩn để triển khai COW. Dùng bản gốc để nhân bản và triển khai mở rộng.</p>
+        </div>
+        <div class="strategy-card">
+          <h4>🌐 Đa chuỗi (Multi-chain)</h4>
+          <p>Mở rộng trên các blockchain khác như <strong>SUI, Solana, Base…</strong> (cần báo giá thêm và đề xuất phương án lâu dài).</p>
+        </div>
+        <div class="strategy-card">
+          <h4>📈 Listing DEX</h4>
+          <p>Hiện tại chưa có giải pháp cho thanh khoản. Tạm ngưng để bàn bạc, tìm hướng và cần cố vấn từ Fiotech.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-danger" style="margin-top: 20px;">
+        <span class="alert-icon">🎯</span>
+        <div class="alert-content">
+          <strong>Ưu tiên hiện tại</strong>
+          <p>Tập trung vào CONTRACT và MỞ RỘNG CHAIN trước.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Smart Contract COW — Documentation v1.0 · 2026</p>
+    </div>
+
+  </div>
+
+</body>
+</html>

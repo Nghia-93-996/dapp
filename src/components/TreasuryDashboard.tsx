@@ -6,9 +6,10 @@ import './TreasuryDashboard.css';
 interface TreasuryDashboardProps {
     cowState: COWContractState;
     chainId: string | null;
+    cowPriceUsd?: number;
 }
 
-export function TreasuryDashboard({ cowState, chainId }: TreasuryDashboardProps) {
+export function TreasuryDashboard({ cowState, chainId, cowPriceUsd }: TreasuryDashboardProps) {
     const { t } = useTranslation();
 
     if (!cowState.isSupported) return null;
@@ -77,6 +78,19 @@ export function TreasuryDashboard({ cowState, chainId }: TreasuryDashboardProps)
                     </div>
                     <div className="treasury-card-value">{formatUsd(cowState.bnbPrice)}</div>
                     <div className="treasury-card-label">{t('treasury.bnbPrice', 'BNB/USD (Chainlink)')}</div>
+                </div>
+
+                {/* COW/USD Price Card (API) */}
+                <div className="treasury-card">
+                    <div className="treasury-card-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+                            <path d="M12 18V6" />
+                        </svg>
+                    </div>
+                    <div className="treasury-card-value">${(cowPriceUsd ?? 1).toFixed(4)}</div>
+                    <div className="treasury-card-label">{t('treasury.cowPrice', 'COW/USD (API)')}</div>
                 </div>
 
                 {/* Backing Ratio Card */}
