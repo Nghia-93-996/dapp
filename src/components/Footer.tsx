@@ -15,7 +15,7 @@ export function Footer() {
           <div className="footer-brand">
             <div className="footer-logo">
               <div className="logo-icon-wrapper">
-                <img src="/media/cow-log.png" alt="COW Logo" className="logo-img" />
+                <img src="/media/cow_sp.gif" alt="COW Logo" className="footer-logo-img" />
               </div>
               <span className="logo-text">COW <span className="logo-accent">Stablecoin</span></span>
             </div>

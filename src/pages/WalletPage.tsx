@@ -171,7 +171,7 @@ function WalletPage() {
                 <div className="header-content">
                     <Link to="/" className="logo" onClick={() => setMobileMenuOpen(false)}>
                         <div className="logo-icon-wrapper">
-                            <img src="/media/cow-log.png" alt="COW Stablecoin Logo" className="logo-img" />
+                            <img src="/media/cow_sp.gif" alt="COW Stablecoin Logo" className="logo-img" />
                         </div>
                         <span className="logo-text">COW <span className="logo-accent">Stablecoin</span></span>
                     </Link>
@@ -298,7 +298,7 @@ function WalletPage() {
                         <div className="wallet-overview">
                             <div className="wallet-overview-header">
                                 <div className="wallet-avatar">
-                                    <img src="/media/cow-log.png" alt="avatar" className="wallet-avatar-img" />
+                                    <img src="/media/cow_sp.gif" alt="COW" className="hero-cow-logo" />
                                 </div>
                                 <div className="wallet-meta">
                                     <div className="wallet-address-display">

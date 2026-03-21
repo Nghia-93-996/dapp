@@ -190,7 +190,7 @@ export default function DocumentPage() {
                 <div className="doc-header-content">
                     <Link to="/" className="logo" onClick={() => setMobileMenuOpen(false)}>
                         <div className="logo-icon-wrapper">
-                            <img src="/media/cow-log.png" alt="COW Logo" className="logo-img" />
+                            <img src="/media/cow_sp.gif" alt="COW" className="hero-cow-logo" />
                         </div>
                         <span className="logo-text">COW <span className="logo-accent">Stablecoin</span></span>
                     </Link>

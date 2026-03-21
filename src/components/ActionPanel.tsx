@@ -293,7 +293,7 @@ export function ActionPanel({
                             {isCOWActive && (
                                 <div className="preview-row">
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <img src="/media/cow-log.png" alt="" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
+                                        <img src="/media/cow_sp.gif" alt="COW" className="cow-balance-icon" />
                                         {t('action.cowBalanceMint', 'Your COW Balance')}
                                     </span>
                                     <span className="preview-value" style={{ fontSize: '1.05rem', fontWeight: 600, color: '#8B5CF6' }}>
