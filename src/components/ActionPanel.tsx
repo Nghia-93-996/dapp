@@ -63,40 +63,54 @@ export function ActionPanel({
 
     // Client-side estimation: calculate COW output from BNB amount using on-chain params
     const estimateMint = (amount: string) => {
-        const bnb = parseFloat(amount);
-        const price = parseFloat(bnbPrice ?? '0');
+        const bnbSize = parseFloat(amount);
+        const bnbP = parseFloat(bnbPrice ?? '0');
         const ltv = ltvBps ?? 0;
         const spread = spreadBps ?? 0;
         const mintFee = mintFeeBps ?? 0;
-        if (bnb <= 0 || price <= 0 || ltv <= 0) return null;
-        // COW gross = BNB * price * LTV / 10000
-        const cowGross = bnb * price * ltv / 10000;
-        const spreadFeeAmt = cowGross * spread / 10000;
+        const basePrice = cowPriceUsd ?? 1;
+
+        if (bnbSize <= 0 || bnbP <= 0 || ltv <= 0 || basePrice <= 0) return null;
+
+        // 1. Calculate Mint Price (Base + Spread)
+        const mintPrice = basePrice * (1 + spread / 10000);
+        
+        // 2. COW gross = (BNB * BNB_price * LTV) / MintPrice
+        const usdValue = bnbSize * bnbP * ltv / 10000;
+        const cowGross = usdValue / mintPrice;
+        
+        // 3. Fees and Spread breakdown for UI
         const mintFeeAmt = cowGross * mintFee / 10000;
-        const tokensOut = cowGross - spreadFeeAmt - mintFeeAmt;
+        const tokensOut = cowGross - mintFeeAmt;
+
         return {
             tokensOut: tokensOut.toString(),
-            spreadFee: spreadFeeAmt.toString(),
+            spreadFee: (usdValue / basePrice - cowGross).toString(), 
             mintFee: mintFeeAmt.toString(),
+            mintPrice: mintPrice
         };
     };
 
     const estimateBurn = (amount: string) => {
-        const cow = parseFloat(amount);
-        const price = parseFloat(bnbPrice ?? '0');
+        const cowSize = parseFloat(amount);
+        const bnbP = parseFloat(bnbPrice ?? '0');
         const ltv = ltvBps ?? 0;
-        const spread = spreadBps ?? 0;
         const burnFee = burnFeeBps ?? 0;
-        if (cow <= 0 || price <= 0 || ltv <= 0) return null;
-        // BNB gross = COW / (price * LTV / 10000) -> inverse of mint
-        const bnbGross = cow / (price * ltv / 10000);
-        const spreadFeeAmt = bnbGross * spread / 10000;
+        const basePrice = cowPriceUsd ?? 1;
+
+        if (cowSize <= 0 || bnbP <= 0 || ltv <= 0 || basePrice <= 0) return null;
+
+        const burnPrice = basePrice;
+        const usdValue = cowSize * burnPrice;
+        const bnbGross = usdValue / (bnbP * ltv / 10000);
         const burnFeeAmt = bnbGross * burnFee / 10000;
-        const bnbOut = bnbGross - spreadFeeAmt - burnFeeAmt;
+        const bnbOut = bnbGross - burnFeeAmt;
+
         return {
             bnbOut: bnbOut.toString(),
-            spreadFee: spreadFeeAmt.toString(),
+            spreadFee: '0', 
             burnFee: burnFeeAmt.toString(),
+            burnPrice: burnPrice
         };
     };
 
@@ -327,8 +341,11 @@ export function ActionPanel({
                     {isCOWActive && effectiveMintPreview && (
                         <div className="action-preview">
                             <div className="preview-row">
+                                <span style={{ color: '#34d399' }}>💰 Giá Mint: ${(effectiveMintPreview as any).mintPrice?.toFixed(4) || '0.0000'}</span>
+                            </div>
+                            <div className="preview-row">
                                 <span>{t('action.youReceive', 'You receive')}</span>
-                                <span className="preview-value">{formatPreview(effectiveMintPreview.tokensOut)} COW ≈ ${(parseFloat(effectiveMintPreview.tokensOut) * (cowPriceUsd ?? 1)).toFixed(2)}</span>
+                                <span className="preview-value">{formatPreview(effectiveMintPreview.tokensOut)} COW</span>
                             </div>
                             <div className="preview-row">
                                 <span>{t('action.spreadFee', 'Spread (1%)')}</span>
@@ -451,12 +468,11 @@ export function ActionPanel({
                     {isCOWActive && effectiveBurnPreview && (
                         <div className="action-preview">
                             <div className="preview-row">
-                                <span>{t('action.youReceive', 'You receive')}</span>
-                                <span className="preview-value">{formatPreview(effectiveBurnPreview.bnbOut)} {currencySymbol}</span>
+                                <span style={{ color: '#fb923c' }}>💰 Giá Burn: ${(effectiveBurnPreview as any).burnPrice?.toFixed(4) || '0.0000'}</span>
                             </div>
                             <div className="preview-row">
-                                <span>{t('action.spreadFee', 'Spread (1%)')}</span>
-                                <span className="preview-fee">{formatPreview(effectiveBurnPreview.spreadFee)} {currencySymbol}</span>
+                                <span>{t('action.youReceive', 'You receive')}</span>
+                                <span className="preview-value">{formatPreview(effectiveBurnPreview.bnbOut)} {currencySymbol}</span>
                             </div>
                             <div className="preview-row">
                                 <span>{t('action.burnFee', 'Burn Fee (0.3%)')}</span>
