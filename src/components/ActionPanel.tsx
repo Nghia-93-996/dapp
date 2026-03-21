@@ -116,8 +116,14 @@ export function ActionPanel({
 
     // Effective mint preview: contract preview first, fallback to client estimate
     const effectiveMintPreview = (() => {
+        const spread = spreadBps ?? 0;
+        const basePrice = cowPriceUsd ?? 1;
+        const mintPrice = basePrice * (1 + spread / 10000);
+
         // If contract preview exists and has non-zero tokensOut, use it
-        if (mintPreview && parseFloat(mintPreview.tokensOut) > 0) return mintPreview;
+        if (mintPreview && parseFloat(mintPreview.tokensOut) > 0) {
+            return { ...mintPreview, mintPrice };
+        }
         // Otherwise fallback to client-side estimate
         if (isCOWActive && mintAmount && parseFloat(mintAmount) > 0) {
             return estimateMint(mintAmount);
@@ -127,7 +133,10 @@ export function ActionPanel({
 
     // Effective burn preview: contract preview first, fallback to client estimate
     const effectiveBurnPreview = (() => {
-        if (burnPreview && parseFloat(burnPreview.bnbOut) > 0) return burnPreview;
+        const burnPrice = cowPriceUsd ?? 1;
+        if (burnPreview && parseFloat(burnPreview.bnbOut) > 0) {
+            return { ...burnPreview, burnPrice };
+        }
         if (isCOWActive && burnAmount && parseFloat(burnAmount) > 0) {
             return estimateBurn(burnAmount);
         }
