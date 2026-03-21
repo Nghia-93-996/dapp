@@ -680,9 +680,8 @@
 
 /* ── Hero Exchange Rates ─────────────────────────── */
 .hero-rates {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -701,11 +700,18 @@
   justify-content: center;
   gap: 16px;
   padding: 15px 24px;
-  flex: 1 1 400px;
-  min-width: 240px;
+  min-width: 0;
   transition: background 0.3s ease;
-  border-right: 1px solid rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid transparent;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-rate:nth-child(2n) {
+  border-right: none;
+}
+
+.hero-rate:nth-last-child(-n+2) {
+  border-bottom: none;
 }
 
 /* Specific border management for wrapping */
@@ -1206,7 +1212,7 @@
   }
 
   .hero-rates {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     width: 100%;
     max-width: none;
     margin: 20px 0 0;
