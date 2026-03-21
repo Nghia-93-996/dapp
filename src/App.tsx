@@ -36,7 +36,7 @@ function App() {
     wallet.address,
   );
 
-  const { cowPriceUsd } = useCOWPrice();
+  const { cowPriceUsd: _apiPrice } = useCOWPrice();
 
   const txHistory = useTransactionHistory(
     wallet.provider,
@@ -255,15 +255,18 @@ function App() {
             const spread = cowContract.spreadBps || 0;
             const mintFee = cowContract.mintFeeBps || 0;
             const burnFee = cowContract.burnFeeBps || 0;
-            const hasRates = price > 0 && ltv > 0;
+            const cowPrice = parseFloat(cowContract.cowPriceUsd || '1');
+            const hasRates = price > 0 && ltv > 0 && cowPrice > 0;
 
             // Mint: 1 BNB → X COW (net after spread + mint fee)
+            // COW = (BNB_Price * LTV / COW_Price) * (1 - spread) * (1 - mintFee)
             const cowPerBnb = hasRates
-              ? price * ltv / 10000 * (1 - spread / 10000) * (1 - mintFee / 10000)
+              ? (price * ltv / 10000 / cowPrice) * (1 - spread / 10000) * (1 - mintFee / 10000)
               : 0;
             // Burn: 1 COW → Y BNB (net after spread + burn fee)
+            // BNB = (COW_Price / BNB_Price * LTV) * (1 - burnFee)
             const bnbPerCow = hasRates
-              ? (1 / (price * ltv / 10000)) * (1 - spread / 10000) * (1 - burnFee / 10000)
+              ? (cowPrice / (price * ltv / 10000)) * (1 - burnFee / 10000)
               : 0;
 
             return (
@@ -323,7 +326,7 @@ function App() {
                   <div className="rate-info">
                     <span className="rate-label">COW/USD</span>
                     <span className="rate-value">
-                      <strong>${cowPriceUsd.toFixed(4)}</strong>
+                      <strong>${parseFloat(cowContract.cowPriceUsd || '1').toFixed(4)}</strong>
                     </span>
                   </div>
                 </div>
@@ -340,11 +343,11 @@ function App() {
             address={wallet.address}
             getNetworkName={getNetworkName}
             cowBalance={cowContract.cowBalance}
-            cowPriceUsd={cowPriceUsd}
+            cowPriceUsd={parseFloat(cowContract.cowPriceUsd || '1')}
           />
         )}
 
-        {/* Action Panel */}
+          {/* Action Panel */}
         <ActionPanel
           provider={wallet.provider}
           isConnected={wallet.isConnected}
@@ -361,13 +364,13 @@ function App() {
           mintFeeBps={cowContract.mintFeeBps}
           burnFeeBps={cowContract.burnFeeBps}
           bnbBalance={wallet.balance}
-          cowPriceUsd={cowPriceUsd}
+          cowPriceUsd={parseFloat(cowContract.cowPriceUsd || '1')}
           onTransactionComplete={() => { cowContract.refresh(); txHistory.refresh(); }}
         />
 
         {/* Treasury Dashboard */}
         {wallet.isConnected && (
-          <TreasuryDashboard cowState={cowContract} chainId={wallet.chainId ?? null} cowPriceUsd={cowPriceUsd} />
+          <TreasuryDashboard cowState={cowContract} chainId={wallet.chainId ?? null} cowPriceUsd={parseFloat(cowContract.cowPriceUsd || '1')} />
         )}
 
         {/* Transaction History */}
