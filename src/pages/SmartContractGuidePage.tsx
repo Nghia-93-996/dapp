@@ -496,8 +496,8 @@ async function main() {
                             <table className="pdoc-table">
                                 <thead><tr><th>Contract</th><th>Địa chỉ</th><th>Explorer</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>COWToken</strong></td><td><code>0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8</code></td><td><a href="https://testnet.bscscan.com/address/0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
-                                    <tr><td><strong>COWTimelock</strong></td><td><code>0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413</code></td><td><a href="https://testnet.bscscan.com/address/0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
+                                    <tr><td><strong>COWToken</strong></td><td><code>0x049CE6FeBaE5746c0A43F88A4328073E4f49e55F</code></td><td><a href="https://testnet.bscscan.com/address/0x049CE6FeBaE5746c0A43F88A4328073E4f49e55F" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
+                                    <tr><td><strong>COWTimelock</strong></td><td><code>0x705Ea1c77335f736e796361f0D9c5E7d55f1E02c</code></td><td><a href="https://testnet.bscscan.com/address/0x705Ea1c77335f736e796361f0D9c5E7d55f1E02c" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
                                     <tr><td><strong>Fee Collector</strong></td><td><code>0x65E8c1434E348EE409A0d6488b9e293C3fFdd998</code></td><td>—</td></tr>
                                 </tbody>
                             </table>
@@ -570,7 +570,7 @@ export const COW_TOKEN_ABI = [
                     <div className="pdoc-block">
                         <h3 className="pdoc-subtitle">7.2 Mapping địa chỉ theo chain</h3>
                         <CodeBlock lang="typescript">{`export const COW_TOKEN_ADDRESSES: Record<string, string> = {
-    '0x61': '0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8',
+    '0x61': '0x049CE6FeBaE5746c0A43F88A4328073E4f49e55F',
 };
 
 export function getCOWTokenAddress(chainId: string | null) {
@@ -662,13 +662,13 @@ await tx.wait();`}</CodeBlock>
                         <h3 className="pdoc-subtitle">8.4 Ví dụ: Đổi mint fee qua Timelock</h3>
                         <p className="pdoc-text"><strong>Ví dụ:</strong> Đổi mint fee từ 0.3% (30 bps) → 0.5% (50 bps):</p>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>Bước 1: Schedule — Đặt lịch</h4>
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>Bước 1: Schedule — Đặt lịch</h4>
                         <CodeBlock lang="typescript">{`// scripts/timelock-schedule.ts
 import { ethers } from "hardhat";
 
 async function main() {
-    const TIMELOCK = "0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413";
-    const COW_TOKEN = "0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8";
+    const TIMELOCK = "0x705Ea1c77335f736e796361f0D9c5E7d55f1E02c";
+    const COW_TOKEN = "0x049CE6FeBaE5746c0A43F88A4328073E4f49e55F";
     const MIN_DELAY = 48 * 60 * 60; // 48h = 172800 giây
 
     const timelock = await ethers.getContractAt("COWTimelock", TIMELOCK);
@@ -692,7 +692,7 @@ async function main() {
     console.log("Lệnh đã schedule! Chờ 48h...");
 }`}</CodeBlock>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>Bước 2: Chờ 48h — Cộng đồng kiểm tra</h4>
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>Bước 2: Chờ 48h — Cộng đồng kiểm tra</h4>
                         <ul className="pdoc-checklist">
                             <li className="pdoc-check"><CheckIcon />Xem lệnh trên <strong>BscScan</strong> (event <code>CallScheduled</code>)</li>
                             <li className="pdoc-check"><CheckIcon />Giải mã <code>callData</code> để biết <strong>thông số nào thay đổi</strong></li>
@@ -700,7 +700,7 @@ async function main() {
                             <li className="pdoc-check"><CheckIcon />Admin hủy lệnh bằng <code>cancel(operationId)</code> nếu sai sót</li>
                         </ul>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>Bước 3: Execute — Thực thi sau 48h</h4>
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>Bước 3: Execute — Thực thi sau 48h</h4>
                         <CodeBlock lang="typescript">{`// Chạy SAU 48h
 const tx = await timelock.execute(
     COW_TOKEN, 0, callData,
@@ -742,8 +742,8 @@ console.log("Mint fee đã đổi thành 0.5%!");`}</CodeBlock>
                             <table className="pdoc-table">
                                 <thead><tr><th>Nơi kiểm tra</th><th>Link</th><th>Nội dung</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>BscScan — COWToken</strong></td><td><a href="https://testnet.bscscan.com/address/0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Source code Solidity, verified</td></tr>
-                                    <tr><td><strong>BscScan — Timelock</strong></td><td><a href="https://testnet.bscscan.com/address/0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Timelock + lệnh đang chờ</td></tr>
+                                    <tr><td><strong>BscScan — COWToken</strong></td><td><a href="https://testnet.bscscan.com/address/0x049CE6FeBaE5746c0A43F88A4328073E4f49e55F#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Source code Solidity, verified</td></tr>
+                                    <tr><td><strong>BscScan — Timelock</strong></td><td><a href="https://testnet.bscscan.com/address/0x705Ea1c77335f736e796361f0D9c5E7d55f1E02c#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Timelock + lệnh đang chờ</td></tr>
 
                                 </tbody>
                             </table>
@@ -777,7 +777,7 @@ console.log("Mint fee đã đổi thành 0.5%!");`}</CodeBlock>
 import { ethers } from "hardhat";
 
 async function main() {
-    const V2 = "0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8";
+    const V2 = "0x049CE6FeBaE5746c0A43F88A4328073E4f49e55F";
     const v2 = await ethers.getContractAt("COWToken", V2);
 
     // Lấy danh sách user qua event logs
@@ -836,7 +836,7 @@ async function main() {
                             <p className="pdoc-formula-line" dangerouslySetInnerHTML={{ __html: t('smartContract.s9_1Formula1') }} />
                             <p className="pdoc-formula-line" dangerouslySetInnerHTML={{ __html: t('smartContract.s9_1Formula2') }} />
                         </div>
-                        <p className="pdoc-text" style={{marginTop: '16px'}}><strong>{t('smartContract.s9_1TableTitle')}</strong></p>
+                        <p className="pdoc-text" style={{ marginTop: '16px' }}><strong>{t('smartContract.s9_1TableTitle')}</strong></p>
                         <div className="pdoc-table-wrapper">
                             <table className="pdoc-table">
                                 <thead><tr><th>{t('smartContract.s9_1H_ratio')}</th><th>{t('smartContract.s9_1H_status')}</th><th>{t('smartContract.s9_1H_action')}</th></tr></thead>
@@ -900,19 +900,19 @@ async function checkAndLiquidate(targetUser: string) {
 
                     <div className="pdoc-block">
                         <h3 className="pdoc-subtitle">{t('smartContract.s9_4Title')}</h3>
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}} dangerouslySetInnerHTML={{ __html: t('smartContract.s9_4RewardTitle') }} />
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }} dangerouslySetInnerHTML={{ __html: t('smartContract.s9_4RewardTitle') }} />
                         <ul className="pdoc-checklist">
                             <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s9_4Reward1') }} /></li>
                             <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s9_4Reward2') }} /></li>
                             <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s9_4Reward3') }} /></li>
                         </ul>
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}} dangerouslySetInnerHTML={{ __html: t('smartContract.s9_4RiskTitle') }} />
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }} dangerouslySetInnerHTML={{ __html: t('smartContract.s9_4RiskTitle') }} />
                         <ul className="pdoc-checklist">
                             <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s9_4Risk1') }} /></li>
                             <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s9_4Risk2') }} /></li>
                             <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s9_4Risk3') }} /></li>
                         </ul>
-                        <div className="pdoc-info-card pdoc-info-card--info" style={{marginTop: '16px'}}>
+                        <div className="pdoc-info-card pdoc-info-card--info" style={{ marginTop: '16px' }}>
                             <span className="pdoc-info-card-icon">💰</span>
                             <span className="pdoc-info-card-text">
                                 <strong>{t('smartContract.s9_4ExampleTitle')}</strong><br />
@@ -925,7 +925,7 @@ async function checkAndLiquidate(targetUser: string) {
                         <h3 className="pdoc-subtitle">{t('smartContract.s9_5Title')}</h3>
                         <p className="pdoc-text">{t('smartContract.s9_5Text')}</p>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>{t('smartContract.s9_5Method1Title')}</h4>
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>{t('smartContract.s9_5Method1Title')}</h4>
                         <p className="pdoc-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s9_5Method1Text') }} />
                         <CodeBlock lang="typescript">{`// Monitor all Minted events to find users with positions
 const events = await contract.queryFilter(contract.filters.Minted());
@@ -939,7 +939,7 @@ for (const user of users) {
     }
 }`}</CodeBlock>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>{t('smartContract.s9_5Method2Title')}</h4>
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>{t('smartContract.s9_5Method2Title')}</h4>
                         <p className="pdoc-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s9_5Method2Text') }} />
 
                         <div className="pdoc-info-card pdoc-info-card--security">
@@ -982,7 +982,7 @@ for (const user of users) {
                         <h3 className="pdoc-subtitle">{t('smartContract.s10_3Title')}</h3>
                         <p className="pdoc-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s10_3Text') }} />
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>{t('smartContract.s10_3Step1Title')}</h4>
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>{t('smartContract.s10_3Step1Title')}</h4>
                         <p className="pdoc-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s10_3Step1Text') }} />
                         <CodeBlock lang="typescript">{`// hardhat.config.ts
 etherscan: {
@@ -1002,7 +1002,7 @@ etherscan: {
     ],
 }`}</CodeBlock>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>{t('smartContract.s10_3Step2Title')}</h4>
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>{t('smartContract.s10_3Step2Title')}</h4>
                         <p className="pdoc-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s10_3Step2Text') }} />
                         <CodeBlock lang="bash">{`# Verify COWToken on BSC Testnet
 npx hardhat verify --network bscTestnet \\
@@ -1022,7 +1022,7 @@ npx hardhat verify --network bscTestnet \\
   "0xYourTreasury2" \\
   8000 30 30 100`}</CodeBlock>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>{t('smartContract.s10_3Step3Title')}</h4>
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>{t('smartContract.s10_3Step3Title')}</h4>
                         <p className="pdoc-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s10_3Step3Text') }} />
                         <CodeBlock lang="javascript">{`// arguments-timelock.js
 const MIN_DELAY = 172800; // 48 hours in seconds
@@ -1041,7 +1041,7 @@ npx hardhat verify --network bscTestnet \\
   --constructor-args arguments-timelock.js \\
   0xYourTimelockAddress`}</CodeBlock>
 
-                        <h4 className="pdoc-subtitle" style={{fontSize: '0.88rem', marginTop: '16px'}}>{t('smartContract.s10_3Step4Title')}</h4>
+                        <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>{t('smartContract.s10_3Step4Title')}</h4>
                         <p className="pdoc-text">{t('smartContract.s10_3Step4Text')}</p>
                         <ul className="pdoc-checklist">
                             <li className="pdoc-check"><CheckIcon /><span dangerouslySetInnerHTML={{ __html: t('smartContract.s10_3Step4C1') }} /></li>
@@ -1113,7 +1113,7 @@ console.log("Constructor Args (hex):", encoded);`}</CodeBlock>
                                 </tbody>
                             </table>
                         </div>
-                        <div className="pdoc-info-card pdoc-info-card--info" style={{marginTop: '16px'}}>
+                        <div className="pdoc-info-card pdoc-info-card--info" style={{ marginTop: '16px' }}>
                             <span className="pdoc-info-card-icon">💡</span>
                             <span className="pdoc-info-card-text">
                                 <strong>Pro tip:</strong> {t('smartContract.s10_3Step1Text')}

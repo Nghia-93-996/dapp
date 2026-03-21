@@ -67,7 +67,7 @@ export const COW_TOKEN_ABI = [
  */
 export const COW_TOKEN_ADDRESSES: Record<string, string> = {
     // BSC Testnet (chain 97 = 0x61)
-    '0x61': '0x6b0E49E7141700B4DAec5Ab1215e170d4beE83c8',
+    '0x61': '0x049CE6FeBaE5746c0A43F88A4328073E4f49e55F',
     // BSC Mainnet (chain 56 = 0x38)
     // '0x38': '0x...',
 };
@@ -113,7 +113,7 @@ export const TIMELOCK_ABI = [
  */
 export const TIMELOCK_ADDRESSES: Record<string, string> = {
     // BSC Testnet (chain 97 = 0x61)
-    '0x61': '0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413',
+    '0x61': '0x705Ea1c77335f736e796361f0D9c5E7d55f1E02c',
     // BSC Mainnet (chain 56 = 0x38)
     // '0x38': '0x...',
 };

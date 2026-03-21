@@ -33,7 +33,7 @@ export interface AdminState {
 // ─── Constants ─────────────────────────────────────────────────────
 
 /** Timelock address (owner of COWToken after deployment) */
-const KNOWN_OWNER = '0x01487E36Ec2Bd4b34885F3DF31d59D8451A86413';
+const KNOWN_OWNER = '0x705Ea1c77335f736e796361f0D9c5E7d55f1E02c';
 
 /** Deployer / priceUpdater — authorized to call setCOWPrice directly */
 const CONTRACT_CREATOR = '0x65E8c1434E348EE409A0d6488b9e293C3fFdd998';
@@ -152,11 +152,11 @@ export function useAdminContract(
         contract.priceUpdater(), // New
       ]);
 
-      const ownerAddress  = settledValue<string>(settled, 0, '');
-      const isPaused      = settledValue<boolean>(settled, 1, false);
-      const feeCollector  = settledValue<string>(settled, 2, '');
-      const treasury2     = settledValue<string>(settled, 3, '');
-      const priceUpdater  = settledValue<string>(settled, 4, '');
+      const ownerAddress = settledValue<string>(settled, 0, '');
+      const isPaused = settledValue<boolean>(settled, 1, false);
+      const feeCollector = settledValue<string>(settled, 2, '');
+      const treasury2 = settledValue<string>(settled, 3, '');
+      const priceUpdater = settledValue<string>(settled, 4, '');
 
       setState({
         isOwner: !!userAddress && isAuthorizedAdmin(userAddress, ownerAddress),
@@ -314,16 +314,16 @@ export function useAdminContract(
 
   // ── Timelocked admin actions (48h delay) ──
 
-  const setMintFee              = useCallback((bps: number) => scheduleOp('setMintFee', [bps]), [scheduleOp]);
-  const setBurnFee              = useCallback((bps: number) => scheduleOp('setBurnFee', [bps]), [scheduleOp]);
-  const setSpreadBps            = useCallback((bps: number) => scheduleOp('setSpreadBps', [bps]), [scheduleOp]);
-  const setLtv                  = useCallback((bps: number) => scheduleOp('setLtv', [bps]), [scheduleOp]);
+  const setMintFee = useCallback((bps: number) => scheduleOp('setMintFee', [bps]), [scheduleOp]);
+  const setBurnFee = useCallback((bps: number) => scheduleOp('setBurnFee', [bps]), [scheduleOp]);
+  const setSpreadBps = useCallback((bps: number) => scheduleOp('setSpreadBps', [bps]), [scheduleOp]);
+  const setLtv = useCallback((bps: number) => scheduleOp('setLtv', [bps]), [scheduleOp]);
   const setLiquidationThreshold = useCallback((bps: number) => scheduleOp('setLiquidationThreshold', [bps]), [scheduleOp]);
-  const setFeeCollector         = useCallback((addr: string) => scheduleOp('setFeeCollector', [addr]), [scheduleOp]);
-  const setTreasury2            = useCallback((addr: string) => scheduleOp('setTreasury2', [addr]), [scheduleOp]);
-  const setPriceFeed            = useCallback((addr: string) => scheduleOp('setPriceFeed', [addr]), [scheduleOp]);
-  const pause                   = useCallback(() => scheduleOp('pause', []), [scheduleOp]);
-  const unpause                 = useCallback(() => scheduleOp('unpause', []), [scheduleOp]);
+  const setFeeCollector = useCallback((addr: string) => scheduleOp('setFeeCollector', [addr]), [scheduleOp]);
+  const setTreasury2 = useCallback((addr: string) => scheduleOp('setTreasury2', [addr]), [scheduleOp]);
+  const setPriceFeed = useCallback((addr: string) => scheduleOp('setPriceFeed', [addr]), [scheduleOp]);
+  const pause = useCallback(() => scheduleOp('pause', []), [scheduleOp]);
+  const unpause = useCallback(() => scheduleOp('unpause', []), [scheduleOp]);
 
   // ── Direct admin actions (no Timelock delay) ──
 
