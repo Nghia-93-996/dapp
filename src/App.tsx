@@ -307,7 +307,13 @@ function App() {
 
                 <div className="hero-rate bnb-rate">
                   <div className="rate-icon bnb-rate-icon">
-                    <span className="bnb-logo">🟡</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2L15.5 5.5L12 9L8.5 5.5L12 2Z" fill="#F3BA2F"/>
+                      <path d="M5.5 8.5L9 12L5.5 15.5L2 12L5.5 8.5Z" fill="#F3BA2F"/>
+                      <path d="M18.5 8.5L22 12L18.5 15.5L15 12L18.5 8.5Z" fill="#F3BA2F"/>
+                      <path d="M12 15L15.5 18.5L12 22L8.5 18.5L12 15Z" fill="#F3BA2F"/>
+                      <path d="M12 10L14 12L12 14L10 12L12 10Z" fill="#F3BA2F"/>
+                    </svg>
                   </div>
                   <div className="rate-info">
                     <span className="rate-label">BNB/USD</span>
@@ -321,7 +327,7 @@ function App() {
 
                 <div className="hero-rate cow-rate">
                   <div className="rate-icon cow-rate-icon">
-                    <span className="cow-logo">🐄</span>
+                    <img src="/media/cow-log.png" alt="COW" className="hero-cow-logo" />
                   </div>
                   <div className="rate-info">
                     <span className="rate-label">COW/USD</span>

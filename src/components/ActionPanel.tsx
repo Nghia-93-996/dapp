@@ -242,7 +242,16 @@ export function ActionPanel({
             {/* BNB Price Display (V2) */}
             {isCOWActive && bnbPrice && parseFloat(bnbPrice) > 0 && (
                 <div className="bnb-price-bar">
-                    <span className="price-label">🟡 BNB/USD</span>
+                    <span className="price-label">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ marginRight: '4px', verticalAlign: 'middle' }}>
+                            <path d="M12 2L15.5 5.5L12 9L8.5 5.5L12 2Z" fill="#F3BA2F"/>
+                            <path d="M5.5 8.5L9 12L5.5 15.5L2 12L5.5 8.5Z" fill="#F3BA2F"/>
+                            <path d="M18.5 8.5L22 12L18.5 15.5L15 12L18.5 8.5Z" fill="#F3BA2F"/>
+                            <path d="M12 15L15.5 18.5L12 22L8.5 18.5L12 15Z" fill="#F3BA2F"/>
+                            <path d="M12 10L14 12L12 14L10 12L12 10Z" fill="#F3BA2F"/>
+                        </svg>
+                        BNB/USD
+                    </span>
                     <span className="price-value">{formatUsd(bnbPrice)}</span>
                     {ltvBps && <span className="ltv-badge">LTV {(ltvBps / 100).toFixed(0)}%</span>}
                 </div>
@@ -283,7 +292,10 @@ export function ActionPanel({
                             </div>
                             {isCOWActive && (
                                 <div className="preview-row">
-                                    <span>🐄 {t('action.cowBalanceMint', 'Your COW Balance')}</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <img src="/media/cow-log.png" alt="" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
+                                        {t('action.cowBalanceMint', 'Your COW Balance')}
+                                    </span>
                                     <span className="preview-value" style={{ fontSize: '1.05rem', fontWeight: 600, color: '#8B5CF6' }}>
                                         {cowBalance ? parseFloat(cowBalance).toFixed(4) : '0.0000'} COW
                                     </span>
