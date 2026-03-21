@@ -122,7 +122,7 @@ function App() {
         <div className="header-content">
           <Link to="/" className="logo" onClick={() => setMobileMenuOpen(false)}>
             <div className="logo-icon-wrapper">
-              <img src="/media/cow_sp.gif" alt="COW Logo" className="logo-img" />
+              <img src="/media/cow-log.png" alt="COW Logo" className="logo-img" />
             </div>
             <span className="logo-text">COW <span className="logo-accent">Stablecoin</span></span>
           </Link>
