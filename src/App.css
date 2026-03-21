@@ -1207,8 +1207,9 @@
 
   .hero-rates {
     flex-direction: column;
-    max-width: fit-content;
-    margin: 20px auto 0;
+    width: 100%;
+    max-width: none;
+    margin: 20px 0 0;
     gap: 0;
     background: rgba(255, 255, 255, 0.025);
   }
@@ -1216,7 +1217,7 @@
   .hero-rate {
     padding: 12px 28px;
     width: 100%;
-    justify-content: flex-start;
+    justify-content: center;
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     flex: none;
