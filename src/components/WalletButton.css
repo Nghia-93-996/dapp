@@ -267,3 +267,11 @@
     justify-content: center;
   }
 }
+
+.wallet-balance-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-right: 2px;
+}

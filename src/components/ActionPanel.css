@@ -464,6 +464,13 @@
     gap: 6px;
 }
 
+.cow-balance-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
 .preview-row {
     display: flex;
     justify-content: space-between;

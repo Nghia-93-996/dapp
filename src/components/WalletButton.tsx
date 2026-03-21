@@ -36,7 +36,7 @@ export function WalletButton({
                     </div>
                     <button className="wallet-address-container" onClick={onDisconnect} title="Click to disconnect">
                         <div className="wallet-avatar">
-                            <img src="/media/cow_sp.gif" alt="COW" className="wallet-balance-icon" />
+                            <img src="/media/cow_sp.gif" alt="COW" className="wallet-avatar-img" />
                         </div>
                         <div className="wallet-details">
                             <span className="wallet-address">{shortenAddress(wallet.address)}</span>
