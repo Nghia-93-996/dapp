@@ -287,7 +287,6 @@ function App() {
                   </div>
                 </div>
 
-                <div className="rate-divider" />
 
                 <div className="hero-rate burn-rate">
                   <div className="rate-icon burn-rate-icon">
@@ -303,7 +302,6 @@ function App() {
                   </div>
                 </div>
 
-                <div className="rate-divider" />
 
                 <div className="hero-rate bnb-rate">
                   <div className="rate-icon bnb-rate-icon">
@@ -323,7 +321,6 @@ function App() {
                   </div>
                 </div>
 
-                <div className="rate-divider" />
 
                 <div className="hero-rate cow-rate">
                   <div className="rate-icon cow-rate-icon">
