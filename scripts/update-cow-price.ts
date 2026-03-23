@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import 'dotenv/config';
+// import 'dotenv/config'; // Removed to avoid dependency errors in CI. Use --env-file locally if needed.
 
 // --- Configuration ---
 // Minimal ABI for the price update function
