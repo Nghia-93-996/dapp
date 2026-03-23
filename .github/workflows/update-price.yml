@@ -1,0 +1,31 @@
+name: Update COW Price
+
+on:
+  schedule:
+    # Runs every hour (at minute 8)
+    - cron: '8 * * * *'
+  workflow_dispatch:
+    # Allows manual trigger from GitHub UI
+
+jobs:
+  update-price:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Price Update Bot
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          RPC_URL: ${{ secrets.RPC_URL }}
+          COW_TOKEN_ADDRESS: ${{ secrets.COW_TOKEN_ADDRESS }}
+        run: npx tsx scripts/update-cow-price.ts
