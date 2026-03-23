@@ -36,7 +36,7 @@ function App() {
     wallet.address,
   );
 
-  const { cowPriceUsd: _apiPrice } = useCOWPrice();
+  const { cowPriceUsd: apiCowPrice } = useCOWPrice();
 
   const txHistory = useTransactionHistory(
     wallet.provider,
@@ -255,7 +255,7 @@ function App() {
             const spread = cowContract.spreadBps || 0;
             const mintFee = cowContract.mintFeeBps || 0;
             const burnFee = cowContract.burnFeeBps || 0;
-            const cowPrice = parseFloat(cowContract.cowPriceUsd || '1');
+            const cowPrice = parseFloat(cowContract.cowPriceUsd || '0') || apiCowPrice || 1;
             const hasRates = price > 0 && ltv > 0 && cowPrice > 0;
 
             // Mint: 1 BNB → X COW (net after spread + mint fee)
@@ -329,7 +329,7 @@ function App() {
                   <div className="rate-info">
                     <span className="rate-label">COW/USD</span>
                     <span className="rate-value">
-                      <strong>${parseFloat(cowContract.cowPriceUsd || '1').toFixed(4)}</strong>
+                      <strong>${cowPrice.toFixed(4)}</strong>
                     </span>
                   </div>
                 </div>
@@ -346,7 +346,7 @@ function App() {
             address={wallet.address}
             getNetworkName={getNetworkName}
             cowBalance={cowContract.cowBalance}
-            cowPriceUsd={parseFloat(cowContract.cowPriceUsd || '1')}
+            cowPriceUsd={parseFloat(cowContract.cowPriceUsd || '0') || apiCowPrice || 1}
           />
         )}
 
@@ -367,13 +367,13 @@ function App() {
           mintFeeBps={cowContract.mintFeeBps}
           burnFeeBps={cowContract.burnFeeBps}
           bnbBalance={wallet.balance}
-          cowPriceUsd={parseFloat(cowContract.cowPriceUsd || '1')}
+          cowPriceUsd={parseFloat(cowContract.cowPriceUsd || '0') || apiCowPrice || 1}
           onTransactionComplete={() => { cowContract.refresh(); txHistory.refresh(); }}
         />
 
         {/* Treasury Dashboard */}
         {wallet.isConnected && (
-          <TreasuryDashboard cowState={cowContract} chainId={wallet.chainId ?? null} cowPriceUsd={parseFloat(cowContract.cowPriceUsd || '1')} />
+          <TreasuryDashboard cowState={cowContract} chainId={wallet.chainId ?? null} cowPriceUsd={parseFloat(cowContract.cowPriceUsd || '0') || apiCowPrice || 1} />
         )}
 
         {/* Transaction History */}

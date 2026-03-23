@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Contract, formatEther, parseEther, formatUnits } from 'ethers';
+import { Contract, formatEther, parseEther, formatUnits, JsonRpcProvider } from 'ethers';
 import type { BrowserProvider } from 'ethers';
 import { COW_TOKEN_ABI, getCOWTokenAddress, isCOWChainSupported } from '../contracts/cowConfig';
+import { getNetworkConfig } from '../config/networks';
 
 export interface UserPosition {
     /** BNB collateral deposited (formatted) */
@@ -83,10 +84,20 @@ export function useCOWContract(
     const [state, setState] = useState<COWContractState>(defaultState);
 
     const getContract = useCallback(() => {
-        if (!provider || !chainId) return null;
+        let activeProvider = provider as any;
+        
+        // Fallback to public RPC if no wallet provider is connected
+        if (!activeProvider && chainId) {
+            const config = getNetworkConfig(chainId);
+            if (config?.rpcUrl) {
+                activeProvider = new JsonRpcProvider(config.rpcUrl);
+            }
+        }
+
+        if (!activeProvider || !chainId) return null;
         const address = getCOWTokenAddress(chainId);
         if (!address) return null;
-        return new Contract(address, COW_TOKEN_ABI, provider);
+        return new Contract(address, COW_TOKEN_ABI, activeProvider);
     }, [provider, chainId]);
 
     const getSignedContract = useCallback(async () => {
