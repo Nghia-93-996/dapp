@@ -8,7 +8,7 @@ const COW_TOKEN_ABI = [
 ];
 
 // Load from environment variables (GitHub Secrets when running in CI)
-const COW_TOKEN_ADDRESS = process.env.COW_TOKEN_ADDRESS || "0x049CE6FeBaE5746c0A43F88A4328073E4f49e55F";
+const COW_TOKEN_ADDRESS = process.env.COW_TOKEN_ADDRESS || "0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332";
 const RPC_URL = process.env.RPC_URL || "https://data-seed-prebsc-1-s1.binance.org:8545/";
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 

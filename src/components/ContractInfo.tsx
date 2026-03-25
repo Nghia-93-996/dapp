@@ -12,8 +12,8 @@ interface ContractItem {
 const CONTRACTS: ContractItem[] = [
     {
         name: 'COWToken',
-        address: '0x049CE6FeBaE5746c0A43F88A4328073E4f49e55F',
-        explorerUrl: 'https://testnet.bscscan.com/address/0x049CE6FeBaE5746c0A43F88A4328073E4f49e55F',
+        address: '0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332',
+        explorerUrl: 'https://testnet.bscscan.com/address/0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332',
         icon: (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
@@ -23,8 +23,8 @@ const CONTRACTS: ContractItem[] = [
     },
     {
         name: 'COWTimelock',
-        address: '0x705Ea1c77335f736e796361f0D9c5E7d55f1E02c',
-        explorerUrl: 'https://testnet.bscscan.com/address/0x705Ea1c77335f736e796361f0D9c5E7d55f1E02c',
+        address: '0xEad577d7730bE3d191CbC4e6657816efE7507437',
+        explorerUrl: 'https://testnet.bscscan.com/address/0xEad577d7730bE3d191CbC4e6657816efE7507437',
         icon: (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
@@ -34,8 +34,8 @@ const CONTRACTS: ContractItem[] = [
     },
     {
         name: 'Fee Collector',
-        address: '0x65E8c1434E348EE409A0d6488b9e293C3fFdd998',
-        explorerUrl: 'https://testnet.bscscan.com/address/0x65E8c1434E348EE409A0d6488b9e293C3fFdd998',
+        address: '0xCaCf62df403bB440E2490ED1a741192dD48a10A0',
+        explorerUrl: 'https://testnet.bscscan.com/address/0xCaCf62df403bB440E2490ED1a741192dD48a10A0',
         icon: (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="1" y="3" width="22" height="18" rx="3" ry="3" />
