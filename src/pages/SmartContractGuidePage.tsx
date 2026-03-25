@@ -26,7 +26,7 @@ export default function SmartContractGuidePage() {
                 <div className="pdoc-header-content">
                     <Link to="/" className="logo">
                         <div className="logo-icon-wrapper">
-                            <img src="/logo.png" alt="COW Stablecoin Logo" className="logo-img" />
+                            <img src="/media/cow_sp.gif" alt="COW Stablecoin Logo" className="logo-img" />
                         </div>
                         <span className="logo-text">COW <span className="logo-accent">Stablecoin</span></span>
                     </Link>

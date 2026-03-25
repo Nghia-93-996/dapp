@@ -134,7 +134,7 @@ function WalletPage() {
                 balance: cowContract.cowBalance,
                 icon: (
                     <div className="token-icon-cow">
-                        <span className="token-emoji">🐮</span>
+                        <img src="/media/cow_sp.gif" alt="COW" className="token-icon-img" />
                     </div>
                 ),
                 contractAddress: cowContract.contractAddress,
@@ -398,7 +398,7 @@ function WalletPage() {
                         {cowContract.isSupported && (
                             <div className="cow-details-section">
                                 <div className="token-list-header">
-                                    <h2>🐮 {t('wallet.cowDetails', 'COW Token Details')}</h2>
+                                    <h2><img src="/media/cow_sp.gif" alt="COW" className="section-header-icon" /> {t('wallet.cowDetails', 'COW Token Details')}</h2>
                                 </div>
                                 <div className="cow-stats-grid">
                                     <div className="cow-stat-card">
