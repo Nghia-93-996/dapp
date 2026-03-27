@@ -21,9 +21,9 @@ export function TransactionHistory({ transactions, isLoading, chainId }: Transac
         const now = Date.now();
         const diff = now - date.getTime();
 
-        if (diff < 60_000) return t('tx.justNow', 'Just now');
-        if (diff < 3600_000) return `${Math.floor(diff / 60_000)}m ago`;
-        if (diff < 86400_000) return `${Math.floor(diff / 3600_000)}h ago`;
+        if (diff < 60_000) return t('history.justNow');
+        if (diff < 3600_000) return `${Math.floor(diff / 60_000)}${t('history.agoM')}`;
+        if (diff < 86400_000) return `${Math.floor(diff / 3600_000)}${t('history.agoH')}`;
         return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
     };
 
@@ -42,15 +42,15 @@ export function TransactionHistory({ transactions, isLoading, chainId }: Transac
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                     </svg>
-                    <h2>{t('tx.title', 'Transaction History')}</h2>
+                    <h2>{t('history.title')}</h2>
                 </div>
-                <span className="tx-count">{transactions.length} {t('tx.transactions', 'transactions')}</span>
+                <span className="tx-count">{transactions.length} {t('history.transactions')}</span>
             </div>
 
             {isLoading ? (
                 <div className="tx-loading">
                     <div className="tx-loading-spinner" />
-                    <p>{t('tx.loading', 'Loading transactions...')}</p>
+                    <p>{t('history.loading')}</p>
                 </div>
             ) : transactions.length === 0 ? (
                 <div className="tx-empty">
@@ -59,19 +59,19 @@ export function TransactionHistory({ transactions, isLoading, chainId }: Transac
                         <line x1="2" y1="9" x2="22" y2="9" />
                         <line x1="10" y1="14" x2="18" y2="14" />
                     </svg>
-                    <p>{t('tx.empty', 'No transactions yet. Be the first to mint COW!')}</p>
+                    <p>{t('history.empty')}</p>
                 </div>
             ) : (
                 <div className="tx-table-container">
                     <table className="tx-table">
                         <thead>
                             <tr>
-                                <th>{t('tx.type', 'Type')}</th>
-                                <th>{t('tx.user', 'User')}</th>
+                                <th>{t('history.type')}</th>
+                                <th>{t('history.user')}</th>
                                 <th>BNB</th>
                                 <th>COW</th>
-                                <th>{t('tx.fee', 'Fee')}</th>
-                                <th>{t('tx.time', 'Time')}</th>
+                                <th>{t('history.fee')}</th>
+                                <th>{t('history.time')}</th>
                                 <th>Tx</th>
                             </tr>
                         </thead>
@@ -92,7 +92,7 @@ export function TransactionHistory({ transactions, isLoading, chainId }: Transac
                                                         <path d="M12 12c-2-2.67-6-2.67-6 2 0 3.13 2.69 6 6 9 3.31-3 6-5.88 6-9 0-4.67-4-4.67-6-2z" />
                                                     </svg>
                                                 )}
-                                                {tx.type === 'mint' ? 'Mint' : 'Burn'}
+                                                {tx.type === 'mint' ? t('history.mint') : t('history.burn')}
                                             </span>
                                         </td>
                                         <td className="tx-cell-addr">

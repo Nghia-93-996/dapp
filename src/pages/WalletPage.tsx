@@ -41,7 +41,7 @@ function WalletPage() {
         wallet.address,
     );
 
-    const [selectedChainId, setSelectedChainId] = useState<string>('0x61');
+    const [selectedChainId, setSelectedChainId] = useState<string>('0x38');
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [copiedAddr, setCopiedAddr] = useState<string | null>(null);

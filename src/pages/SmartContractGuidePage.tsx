@@ -491,14 +491,35 @@ async function main() {
                     </div>
 
                     <div className="pdoc-block">
-                        <h3 className="pdoc-subtitle">5.5 Địa chỉ Contract đã deploy (BSC Testnet)</h3>
+                        <h3 className="pdoc-subtitle">5.5 Địa chỉ Contract đã deploy (BSC Mainnet & Testnet)</h3>
                         <div className="pdoc-table-wrapper">
                             <table className="pdoc-table">
-                                <thead><tr><th>Contract</th><th>Địa chỉ</th><th>Explorer</th></tr></thead>
+                                <thead><tr><th>Network</th><th>Contract</th><th>Địa chỉ</th><th>Explorer</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>COWToken</strong></td><td><code>0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332</code></td><td><a href="https://testnet.bscscan.com/address/0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
-                                    <tr><td><strong>COWTimelock</strong></td><td><code>0xEad577d7730bE3d191CbC4e6657816efE7507437</code></td><td><a href="https://testnet.bscscan.com/address/0xEad577d7730bE3d191CbC4e6657816efE7507437" target="_blank" rel="noopener noreferrer">BscScan</a></td></tr>
-                                    <tr><td><strong>Fee Collector</strong></td><td><code>0xCaCf62df403bB440E2490ED1a741192dD48a10A0</code></td><td>—</td></tr>
+                                    <tr className="pdoc-table-row--mainnet">
+                                        <td><strong>Mainnet</strong></td>
+                                        <td><strong>COWToken</strong></td>
+                                        <td><code>0x4C79D24eF2C1166c88375BCe730fdE8894f266Ab</code></td>
+                                        <td><a href="https://bscscan.com/address/0x4C79D24eF2C1166c88375BCe730fdE8894f266Ab" target="_blank" rel="noopener noreferrer">BscScan</a></td>
+                                    </tr>
+                                    <tr className="pdoc-table-row--mainnet">
+                                        <td><strong>Mainnet</strong></td>
+                                        <td><strong>COWTimelock</strong></td>
+                                        <td><code>0xf8Ed2CD8b1C66c7700641E065b98B129141fd156</code></td>
+                                        <td><a href="https://bscscan.com/address/0xf8Ed2CD8b1C66c7700641E065b98B129141fd156" target="_blank" rel="noopener noreferrer">BscScan</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Testnet</td>
+                                        <td>COWToken</td>
+                                        <td><code>0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332</code></td>
+                                        <td><a href="https://testnet.bscscan.com/address/0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332" target="_blank" rel="noopener noreferrer">BscScan</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Testnet</td>
+                                        <td>COWTimelock</td>
+                                        <td><code>0xEad577d7730bE3d191CbC4e6657816efE7507437</code></td>
+                                        <td><a href="https://testnet.bscscan.com/address/0xEad577d7730bE3d191CbC4e6657816efE7507437" target="_blank" rel="noopener noreferrer">BscScan</a></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -571,6 +592,7 @@ export const COW_TOKEN_ABI = [
                         <h3 className="pdoc-subtitle">7.2 Mapping địa chỉ theo chain</h3>
                         <CodeBlock lang="typescript">{`export const COW_TOKEN_ADDRESSES: Record<string, string> = {
     '0x61': '0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332',
+    '0x38': '0x4C79D24eF2C1166c88375BCe730fdE8894f266Ab',
 };
 
 export function getCOWTokenAddress(chainId: string | null) {
@@ -667,9 +689,10 @@ await tx.wait();`}</CodeBlock>
 import { ethers } from "hardhat";
 
 async function main() {
-    const TIMELOCK = "0xEad577d7730bE3d191CbC4e6657816efE7507437";
-    const COW_TOKEN = "0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332";
-    const MIN_DELAY = 48 * 60 * 60; // 48h = 172800 giây
+    // BSC Mainnet Addresses
+    const TIMELOCK = "0xf8Ed2CD8b1C66c7700641E065b98B129141fd156";
+    const COW_TOKEN = "0x4C79D24eF2C1166c88375BCe730fdE8894f266Ab";
+    const MIN_DELAY = 172800; // 48h = 172800 giây
 
     const timelock = await ethers.getContractAt("COWTimelock", TIMELOCK);
 
@@ -742,8 +765,9 @@ console.log("Mint fee đã đổi thành 0.5%!");`}</CodeBlock>
                             <table className="pdoc-table">
                                 <thead><tr><th>Nơi kiểm tra</th><th>Link</th><th>Nội dung</th></tr></thead>
                                 <tbody>
-                                    <tr><td><strong>BscScan — COWToken</strong></td><td><a href="https://testnet.bscscan.com/address/0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Source code Solidity, verified</td></tr>
-                                    <tr><td><strong>BscScan — Timelock</strong></td><td><a href="https://testnet.bscscan.com/address/0xEad577d7730bE3d191CbC4e6657816efE7507437#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Timelock + lệnh đang chờ</td></tr>
+                                    <tr><td><strong>BscScan — COWToken (Mainnet)</strong></td><td><a href="https://bscscan.com/address/0x4C79D24eF2C1166c88375BCe730fdE8894f266Ab#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Mainnet source code, verified</td></tr>
+                                    <tr><td><strong>BscScan — Timelock (Mainnet)</strong></td><td><a href="https://bscscan.com/address/0xf8Ed2CD8b1C66c7700641E065b98B129141fd156#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Mainnet Timelock</td></tr>
+                                    <tr><td><strong>BscScan — COWToken (Testnet)</strong></td><td><a href="https://testnet.bscscan.com/address/0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332#code" target="_blank" rel="noopener noreferrer">Xem BscScan</a></td><td>Testnet source code, verified</td></tr>
 
                                 </tbody>
                             </table>
@@ -777,7 +801,8 @@ console.log("Mint fee đã đổi thành 0.5%!");`}</CodeBlock>
 import { ethers } from "hardhat";
 
 async function main() {
-    const V2 = "0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332";
+    // BSC Mainnet snapshot
+    const V2 = "0x4C79D24eF2C1166c88375BCe730fdE8894f266Ab";
     const v2 = await ethers.getContractAt("COWToken", V2);
 
     // Lấy danh sách user qua event logs
@@ -987,39 +1012,30 @@ for (const user of users) {
                         <CodeBlock lang="typescript">{`// hardhat.config.ts
 etherscan: {
     apiKey: {
-        bscTestnet: process.env.BSCSCAN_API_KEY || "",
         bsc: process.env.BSCSCAN_API_KEY || "",
+        bscTestnet: process.env.BSCSCAN_API_KEY || "",
     },
-    customChains: [
-        {
-            network: "bscTestnet",
-            chainId: 97,
-            urls: {
-                apiURL: "https://api-testnet.bscscan.com/api",
-                browserURL: "https://testnet.bscscan.com",
-            },
-        },
-    ],
+    // No customChains needed for standard BSC/BSC Testnet in latest Hardhat
 }`}</CodeBlock>
 
                         <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>{t('smartContract.s10_3Step2Title')}</h4>
                         <p className="pdoc-text" dangerouslySetInnerHTML={{ __html: t('smartContract.s10_3Step2Text') }} />
-                        <CodeBlock lang="bash">{`# Verify COWToken on BSC Testnet
-npx hardhat verify --network bscTestnet \\
-  CONTRACT_ADDRESS \\
-  "INITIAL_OWNER" \\
-  "PRICE_FEED_ADDRESS" \\
-  "FEE_COLLECTOR_ADDRESS" \\
-  "TREASURY2_ADDRESS" \\
+                        <CodeBlock lang="bash">{`# Verify COWToken on BSC Mainnet
+npx hardhat verify --network bsc \\
+  0x4C79D24eF2C1166c88375BCe730fdE8894f266Ab \\
+  "0xf8Ed2CD8b1C66c7700641E065b98B129141fd156" \\
+  "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE" \\
+  "0xA820AA03894d60E7fcDe0B6C5Add291091fDF223" \\
+  "0xA820AA03894d60E7fcDe0B6C5Add291091fDF223" \\
   8000 30 30 100
 
-# Example with real addresses:
+# Verify COWToken on BSC Testnet
 npx hardhat verify --network bscTestnet \\
-  0xYourCOWTokenAddress \\
-  "0xTimelockAddress" \\
+  0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332 \\
+  "0xEad577d7730bE3d191CbC4e6657816efE7507437" \\
   "0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526" \\
-  "0xYourFeeCollector" \\
-  "0xYourTreasury2" \\
+  "0xCaCf62df403bB440E2490ED1a741192dD48a10A0" \\
+  "0xA820AA03894d60E7fcDe0B6C5Add291091fDF223" \\
   8000 30 30 100`}</CodeBlock>
 
                         <h4 className="pdoc-subtitle" style={{ fontSize: '0.88rem', marginTop: '16px' }}>{t('smartContract.s10_3Step3Title')}</h4>

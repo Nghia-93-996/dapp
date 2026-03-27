@@ -36,10 +36,10 @@ export function TreasuryDashboard({ cowState, chainId, cowPriceUsd }: TreasuryDa
             <div className="treasury-header">
                 <div className="treasury-badge">
                     <span className="treasury-badge-dot" />
-                    <span>{t('treasury.badge', 'Live Treasury')}</span>
+                    <span>{t('treasury.badge')}</span>
                 </div>
-                <h2 className="treasury-title">{t('treasury.title', 'COW Treasury')}</h2>
-                <p className="treasury-desc">{t('treasury.descriptionV2', 'Real-time collateral reserve stats. Every COW token is backed by BNB collateral at LTV with Chainlink oracle pricing.')}</p>
+                <h2 className="treasury-title">{t('treasury.title')}</h2>
+                <p className="treasury-desc">{t('treasury.descriptionV2')}</p>
             </div>
 
             <div className="treasury-grid">
@@ -52,7 +52,7 @@ export function TreasuryDashboard({ cowState, chainId, cowPriceUsd }: TreasuryDa
                         </svg>
                     </div>
                     <div className="treasury-card-value">{formatNumber(cowState.totalCollateral)}</div>
-                    <div className="treasury-card-label">{t('treasury.totalCollateral', 'Total Collateral (BNB)')}</div>
+                    <div className="treasury-card-label">{t('treasury.totalCollateral')}</div>
                 </div>
 
                 {/* Total Supply Card */}
@@ -65,7 +65,7 @@ export function TreasuryDashboard({ cowState, chainId, cowPriceUsd }: TreasuryDa
                         </svg>
                     </div>
                     <div className="treasury-card-value">{formatNumber(cowState.totalSupply)}</div>
-                    <div className="treasury-card-label">{t('treasury.totalSupply', 'Total COW Supply')}</div>
+                    <div className="treasury-card-label">{t('treasury.totalSupply')}</div>
                 </div>
 
                 {/* BNB Price Card (V2) */}
@@ -77,7 +77,7 @@ export function TreasuryDashboard({ cowState, chainId, cowPriceUsd }: TreasuryDa
                         </svg>
                     </div>
                     <div className="treasury-card-value">{formatUsd(cowState.bnbPrice)}</div>
-                    <div className="treasury-card-label">{t('treasury.bnbPrice', 'BNB/USD (Chainlink)')}</div>
+                    <div className="treasury-card-label">{t('treasury.bnbPrice')}</div>
                 </div>
 
                 {/* COW/USD Price Card (API) */}
@@ -90,7 +90,7 @@ export function TreasuryDashboard({ cowState, chainId, cowPriceUsd }: TreasuryDa
                         </svg>
                     </div>
                     <div className="treasury-card-value">${(cowPriceUsd ?? 1).toFixed(4)}</div>
-                    <div className="treasury-card-label">{t('treasury.cowPrice', 'COW/USD (API)')}</div>
+                    <div className="treasury-card-label">{t('treasury.cowPrice')}</div>
                 </div>
 
                 {/* Backing Ratio Card */}
@@ -102,7 +102,7 @@ export function TreasuryDashboard({ cowState, chainId, cowPriceUsd }: TreasuryDa
                         </svg>
                     </div>
                     <div className="treasury-card-value">{cowState.backingRatio}x</div>
-                    <div className="treasury-card-label">{t('treasury.backingRatio', 'Backing Ratio')}</div>
+                    <div className="treasury-card-label">{t('treasury.backingRatio')}</div>
                 </div>
 
                 {/* LTV Card (V2) */}
@@ -115,7 +115,7 @@ export function TreasuryDashboard({ cowState, chainId, cowPriceUsd }: TreasuryDa
                         </svg>
                     </div>
                     <div className="treasury-card-value">{(cowState.ltvBps / 100).toFixed(0)}%</div>
-                    <div className="treasury-card-label">{t('treasury.ltv', 'LTV Ratio')}</div>
+                    <div className="treasury-card-label">{t('treasury.ltv')}</div>
                 </div>
 
                 {/* Fee Info Card */}
@@ -129,21 +129,21 @@ export function TreasuryDashboard({ cowState, chainId, cowPriceUsd }: TreasuryDa
                     <div className="treasury-card-value">
                         {(cowState.spreadBps / 100).toFixed(1)}% / {(cowState.mintFeeBps / 100).toFixed(1)}% / {(cowState.burnFeeBps / 100).toFixed(1)}%
                     </div>
-                    <div className="treasury-card-label">{t('treasury.feesV2', 'Spread / Mint / Burn Fee')}</div>
+                    <div className="treasury-card-label">{t('treasury.feesV2')}</div>
                 </div>
             </div>
 
             {/* Your Balance */}
             {parseFloat(cowState.cowBalance) > 0 && (
                 <div className="treasury-balance">
-                    <span className="treasury-balance-label">{t('treasury.yourBalance', 'Your COW Balance')}</span>
+                    <span className="treasury-balance-label">{t('treasury.yourBalance')}</span>
                     <span className="treasury-balance-value">{formatNumber(cowState.cowBalance)} COW</span>
                 </div>
             )}
 
             {/* Liquidation Threshold Info (V2) */}
             <div className="treasury-info-bar">
-                <span>🛡️ {t('treasury.liquidationInfo', 'Auto-liquidation triggers below')} {(cowState.liquidationThreshold / 100).toFixed(0)}% {t('treasury.collateralRatio', 'collateral ratio')}</span>
+                <span>🛡️ {t('treasury.liquidationInfo')} {(cowState.liquidationThreshold / 100).toFixed(0)}% {t('treasury.collateralRatio')}</span>
             </div>
 
             {/* Contract Link */}
@@ -155,14 +155,14 @@ export function TreasuryDashboard({ cowState, chainId, cowPriceUsd }: TreasuryDa
                             <polyline points="15 3 21 3 21 9" />
                             <line x1="10" y1="14" x2="21" y2="3" />
                         </svg>
-                        {t('treasury.viewContract', 'View Contract on Explorer')}
+                        {t('treasury.viewContract')}
                     </a>
                 </div>
             )}
 
             {cowState.isPaused && (
                 <div className="treasury-paused-banner">
-                    ⚠️ {t('treasury.paused', 'Contract is currently paused. Mint and Burn are disabled.')}
+                    ⚠️ {t('treasury.paused')}
                 </div>
             )}
         </section>

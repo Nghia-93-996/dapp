@@ -18,12 +18,15 @@ const networks = [
 
 const codeBlocks = {
     prerequisites: `// 1. Install MetaMask from https://metamask.io
-// 2. Add BSC Testnet network:
+// 2. Network: BNB Smart Chain (BSC Mainnet)
+//    RPC: https://bsc-dataseed.binance.org
+//    Chain ID: 56
+//    Symbol: BNB
+// 3. To test on BSC Testnet:
 //    RPC: https://data-seed-prebsc-1-s1.binance.org:8545
 //    Chain ID: 97
 //    Symbol: tBNB
-// 3. Get test BNB from faucet:
-//    https://www.bnbchain.org/en/testnet-faucet`,
+//    Faucet: https://www.bnbchain.org/en/testnet-faucet`,
     mint: `// COW Token V2: Collateral-based Minting
 const cowToken = new ethers.Contract(COW_ADDRESS, ABI, signer);
 

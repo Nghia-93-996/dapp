@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useWalletContext } from '../hooks/WalletContext';
 import { useCOWContract } from '../hooks/useCOWContract';
@@ -363,6 +364,7 @@ function PendingOpRow({
    Admin Page Component
    ═══════════════════════════════════════════════════ */
 export default function AdminPage() {
+  const { t } = useTranslation();
   const {
     wallet, isConnecting, connectWallet, disconnectWallet,
     switchNetwork, shortenAddress, getNetworkName,
@@ -376,7 +378,7 @@ export default function AdminPage() {
     wallet.provider, wallet.chainId ?? null, wallet.address,
   );
 
-  const [selectedChainId, setSelectedChainId] = useState<string>('0x61');
+  const [selectedChainId, setSelectedChainId] = useState<string>('0x38');
   const [scrolled, setScrolled] = useState(false);
 
   const effectiveChainId = wallet.isConnected
@@ -464,10 +466,9 @@ export default function AdminPage() {
             <span className="logo-text">COW <span className="logo-accent">Stablecoin</span></span>
           </Link>
           <nav className="header-nav desktop-nav">
-            <Link to="/" className="nav-link">Home</Link>
-            <Link to="/wallet" className="nav-link">Wallet</Link>
-            <Link to="/docs" className="nav-link">Docs</Link>
-
+            <Link to="/" className="nav-link">{t('header.home', 'Home')}</Link>
+            <Link to="/wallet" className="nav-link">{t('footer.walletPage', 'Wallet')}</Link>
+            <Link to="/docs" className="nav-link">{t('header.docs', 'Docs')}</Link>
           </nav>
           <div className="header-actions">
             <NetworkSwitcher currentChainId={effectiveChainId} onSwitchNetwork={handleNetworkSelect} />
@@ -494,19 +495,16 @@ export default function AdminPage() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
             </svg>
-            Back to Home
+            {t('doc.backToApp', 'Back to App')}
           </Link>
           <div className="admin-badge">
             <span className="badge-dot" />
-            Admin Dashboard
+            {t('admin.dashboard')}
           </div>
           <h1 className="admin-page-title">
-            Smart Contract <span className="title-gradient">Management</span>
+            Smart Contract <span className="title-gradient">{t('admin.management')}</span>
           </h1>
-          <p className="admin-page-desc">
-            ⏳ All changes go through a <strong>48-hour Timelock</strong>. Schedule a change → wait 48h → execute.
-            This ensures transparency and prevents sudden parameter changes.
-          </p>
+          <p className="admin-page-desc" dangerouslySetInnerHTML={{ __html: t('admin.timelockExplainer') }} />
         </div>
 
         {/* Access Gate: Not Connected */}
@@ -518,16 +516,16 @@ export default function AdminPage() {
                 <path d="m7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
             </div>
-            <h2 className="gate-title">Connect Your Wallet</h2>
+            <h2 className="gate-title">{t('admin.connectWallet')}</h2>
             <p className="gate-desc">
-              Connect your MetaMask wallet to access admin functions. Only the contract owner / proposer can schedule changes.
+              {t('admin.connectWalletDesc')}
             </p>
             <button className="gate-connect-btn" onClick={handleConnect} disabled={isConnecting}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="1" y="3" width="22" height="18" rx="3" ry="3" />
                 <line x1="1" y1="9" x2="23" y2="9" />
               </svg>
-              {isConnecting ? 'Connecting…' : 'Connect MetaMask'}
+              {isConnecting ? t('wallet.connecting') : t('wallet.connectMetamask')}
             </button>
           </div>
         )}
@@ -543,9 +541,9 @@ export default function AdminPage() {
                   <line x1="12" y1="9" x2="12" y2="13" />
                   <line x1="12" y1="17" x2="12.01" y2="17" />
                 </svg>
+                <span dangerouslySetInnerHTML={{ __html: t('admin.notAuthorized', { address: shortenAddress(wallet.address ?? '') }) }} />
                 <span>
-                  Your wallet ({shortenAddress(wallet.address ?? '')}) is <strong>not authorized</strong> for admin actions.
-                  Owner: <code>{shortenAddr(admin.ownerAddress)}</code>.
+                  {t('admin.owner')}: <code>{shortenAddr(admin.ownerAddress)}</code>.
                 </span>
               </div>
             )}
@@ -556,9 +554,7 @@ export default function AdminPage() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
-                <span>
-                  You are the <strong>Price Updater</strong>. You can update the COW price directly, but other admin functions require the Owner role.
-                </span>
+                <span dangerouslySetInnerHTML={{ __html: t('admin.priceUpdaterNote') }} />
               </div>
             )}
 
@@ -572,13 +568,13 @@ export default function AdminPage() {
                       <polyline points="12 6 12 12 16 14" />
                     </svg>
                   </div>
-                  <h2 className="admin-section-title">⏳ Pending Timelock Operations ({admin.pendingOps.length})</h2>
+                  <h2 className="admin-section-title">⏳ {t('admin.pendingTimelock')} ({admin.pendingOps.length})</h2>
                 </div>
                 <div className="admin-note">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
                   </svg>
-                  Operations require a 48-hour waiting period before execution. Click "Execute" when ready.
+                  {t('admin.timelockNote')}
                 </div>
                 <div className="pending-ops-list">
                   {admin.pendingOps.map(op => (
@@ -603,45 +599,45 @@ export default function AdminPage() {
                     <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
                 </div>
-                <h2 className="admin-section-title">Contract Status</h2>
+                <h2 className="admin-section-title">{t('admin.contractStatus')}</h2>
               </div>
               <div className="admin-status-grid">
                 <div className="status-item">
-                  <span className="status-label">Contract</span>
+                  <span className="status-label">{t('admin.contract')}</span>
                   <span className="status-value address">{shortenAddr(cowContract.contractAddress ?? '')}</span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">Owner (Timelock)</span>
+                  <span className="status-label">{t('admin.ownerTimelock')}</span>
                   <span className="status-value address">{shortenAddr(admin.ownerAddress)}</span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">Status</span>
+                  <span className="status-label">{t('wallet.status')}</span>
                   <span className={`status-value ${admin.isPaused ? 'paused' : 'active'}`}>
-                    {admin.isPaused ? '⏸ Paused' : '▶ Active'}
+                    {admin.isPaused ? `⏸ ${t('admin.paused')}` : `▶ ${t('admin.active')}`}
                   </span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">You are Proposer</span>
+                  <span className="status-label">{t('admin.isProposer')}</span>
                   <span className={`status-value ${admin.isOwner ? 'active' : 'paused'}`}>
-                    {admin.isOwner ? '✅ Yes' : '❌ No'}
+                    {admin.isOwner ? `✅ ${t('admin.yes')}` : `❌ ${t('admin.no')}`}
                   </span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">Price Updater</span>
+                  <span className="status-label">{t('admin.priceUpdater')}</span>
                   <span className="status-value address">{shortenAddr(admin.priceUpdater)}</span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">You are Price Updater</span>
+                  <span className="status-label">{t('admin.isPriceUpdater')}</span>
                   <span className={`status-value ${admin.isPriceUpdater ? 'active' : 'paused'}`}>
-                    {admin.isPriceUpdater ? '✅ Yes' : '❌ No'}
+                    {admin.isPriceUpdater ? `✅ ${t('admin.yes')}` : `❌ ${t('admin.no')}`}
                   </span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">Mint Fee</span>
+                  <span className="status-label">{t('admin.mintFee')}</span>
                   <span className="status-value">{cowContract.mintFeeBps} bps ({(cowContract.mintFeeBps / 100).toFixed(2)}%)</span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">Burn Fee</span>
+                  <span className="status-label">{t('admin.burnFee')}</span>
                   <span className="status-value">{cowContract.burnFeeBps} bps ({(cowContract.burnFeeBps / 100).toFixed(2)}%)</span>
                 </div>
                 <div className="status-item">
@@ -653,11 +649,11 @@ export default function AdminPage() {
                   <span className="status-value">{cowContract.ltvBps} bps ({(cowContract.ltvBps / 100).toFixed(2)}%)</span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">Liquidation Threshold</span>
+                  <span className="status-label">{t('admin.liquidationThreshold')}</span>
                   <span className="status-value">{cowContract.liquidationThreshold} bps ({(cowContract.liquidationThreshold / 100).toFixed(2)}%)</span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">Fee Collector</span>
+                  <span className="status-label">{t('admin.feeCollector')}</span>
                   <span className="status-value address">{shortenAddr(admin.feeCollector)}</span>
                 </div>
                 <div className="status-item">
@@ -665,11 +661,11 @@ export default function AdminPage() {
                   <span className="status-value address">{shortenAddr(admin.treasury2)}</span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">BNB Price</span>
+                  <span className="status-label">{t('admin.bnbPrice')}</span>
                   <span className="status-value">${parseFloat(cowContract.bnbPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
                 <div className="status-item">
-                  <span className="status-label">COW Price (On-chain)</span>
+                  <span className="status-label">{t('admin.cowPriceOnChain')}</span>
                   <span className="status-value" style={{ color: '#60a5fa', fontWeight: 600 }}>
                     ${parseFloat(cowContract.cowPriceUsd).toFixed(4)}
                   </span>
@@ -686,27 +682,27 @@ export default function AdminPage() {
                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                   </svg>
                 </div>
-                <h2 className="admin-section-title">Fee Management</h2>
+                <h2 className="admin-section-title">{t('admin.feeManagement')}</h2>
               </div>
               <div className="admin-note">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
-                Maximum fee: 500 bps (5%). Changes are scheduled through 48h Timelock.
+                {t('admin.maxFeeNote')} {t('admin.timelockNote')}
               </div>
               <div className="admin-cards-grid">
                 <BpsCard
-                  title="Mint Fee" desc="Fee charged on minting COW tokens, sent to feeCollector."
+                  title={t('admin.mintFee')} desc={t('admin.mintFeeDesc')}
                   current={cowContract.mintFeeBps} max={500}
                   onSubmit={admin.setMintFee} disabled={isDisabled}
                 />
                 <BpsCard
-                  title="Burn Fee" desc="Fee charged on burning COW tokens, sent to feeCollector."
+                  title={t('admin.burnFee')} desc={t('admin.burnFeeDesc')}
                   current={cowContract.burnFeeBps} max={500}
                   onSubmit={admin.setBurnFee} disabled={isDisabled}
                 />
                 <BpsCard
-                  title="Spread Fee" desc="Spread fee charged on both operations, sent to treasury2."
+                  title="Spread Fee" desc={t('admin.spreadFeeDesc')}
                   current={cowContract.spreadBps} max={500}
                   onSubmit={admin.setSpreadBps} disabled={isDisabled}
                 />
@@ -721,16 +717,16 @@ export default function AdminPage() {
                     <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
                   </svg>
                 </div>
-                <h2 className="admin-section-title">LTV & Liquidation</h2>
+                <h2 className="admin-section-title">{t('admin.ltvLiquidation')}</h2>
               </div>
               <div className="admin-cards-grid">
                 <BpsCard
-                  title="LTV Ratio" desc="Loan-to-Value ratio. Determines how many COW tokens users can mint per $ of BNB collateral."
+                  title={t('admin.ltvRatio')} desc={t('admin.ltvDesc')}
                   current={cowContract.ltvBps} max={9000}
                   onSubmit={admin.setLtv} disabled={isDisabled}
                 />
                 <BpsCard
-                  title="Liquidation Threshold" desc="Collateral ratio below which positions can be liquidated. Must be > 10000 bps (100%)."
+                  title={t('admin.liquidationThreshold')} desc={t('admin.thresholdDesc')}
                   current={cowContract.liquidationThreshold} max={30000}
                   onSubmit={admin.setLiquidationThreshold} disabled={isDisabled}
                 />
@@ -747,14 +743,13 @@ export default function AdminPage() {
                     <path d="M12 18V6" />
                   </svg>
                 </div>
-                <h2 className="admin-section-title">COW Price Management</h2>
+                <h2 className="admin-section-title">{t('admin.cowPriceManagement')}</h2>
               </div>
               <div className="admin-note">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
-                Giá COW được lấy từ API (hỗ trợ CoinGecko, CoinOfWorld, Binance). Dùng chức năng này để ghi đè giá trực tiếp lên hợp đồng.
-                Giá trị được lưu với 8 chữ số thập phân (ví dụ: $1.0012 = 100120000).
+                {t('admin.priceManagementNote')}
               </div>
               <div className="admin-cards-grid">
                 <PriceCard
@@ -775,21 +770,21 @@ export default function AdminPage() {
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                   </svg>
                 </div>
-                <h2 className="admin-section-title">Address Management</h2>
+                <h2 className="admin-section-title">{t('admin.addressManagement')}</h2>
               </div>
               <div className="admin-cards-grid">
                 <AddressCard
-                  title="Fee Collector" desc="Address that receives mint and burn fees. Cannot be zero address."
+                  title={t('admin.feeCollector')} desc={t('admin.feeCollectorDesc')}
                   current={admin.feeCollector}
                   onSubmit={admin.setFeeCollector} disabled={isDisabled}
                 />
                 <AddressCard
-                  title="Treasury 2" desc="Address that receives spread fees for development & reserves."
+                  title="Treasury 2" desc={t('admin.treasury2Desc')}
                   current={admin.treasury2}
                   onSubmit={admin.setTreasury2} disabled={isDisabled}
                 />
                 <AddressCard
-                  title="Price Feed" desc="Chainlink BNB/USD oracle address. Critical for all price calculations."
+                  title="Price Oracle" desc={t('admin.oracleDesc')}
                   current="—"
                   onSubmit={admin.setPriceFeed} disabled={isDisabled}
                 />
@@ -805,7 +800,7 @@ export default function AdminPage() {
                     <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
                   </svg>
                 </div>
-                <h2 className="admin-section-title">Emergency Controls</h2>
+                <h2 className="admin-section-title">{t('admin.emergencyControls')}</h2>
               </div>
               <div className="emergency-grid">
                 {/* Pause/Unpause (through Timelock) */}
@@ -815,8 +810,8 @@ export default function AdminPage() {
                   </span>
                   <p className="emergency-card-desc">
                     {admin.isPaused
-                      ? 'All operations are suspended. Schedule an unpause via Timelock (48h delay).'
-                      : 'Schedule a pause via Timelock. This will suspend all operations after a 48h delay.'
+                      ? t('admin.pauseNote')
+                      : t('admin.activeNote')
                     }
                   </p>
                   <button
@@ -826,7 +821,7 @@ export default function AdminPage() {
                   >
                     {pauseLoading
                       ? <span className="spinner" />
-                      : admin.isPaused ? '⏳ Schedule Unpause' : '⏳ Schedule Pause'
+                      : admin.isPaused ? `⏳ ${t('admin.scheduleUnpause')}` : `⏳ ${t('admin.schedulePause')}`
                     }
                   </button>
                 </div>

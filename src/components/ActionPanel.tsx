@@ -214,23 +214,23 @@ export function ActionPanel({
                             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
                             <path d="m9 12 2 2 4-4" />
                         </svg>
-                        <span>{t('action.yourPosition', 'Your Position')}</span>
+                        <span>{t('action.yourPosition')}</span>
                         <span className={`position-health-badge badge-${userPosition.health}`}>
-                            {userPosition.health === 'healthy' ? '✅ Healthy' :
-                             userPosition.health === 'warning' ? '⚠️ Warning' : '🚨 Danger'}
+                            {userPosition.health === 'healthy' ? `✅ ${t('action.healthy')}` :
+                             userPosition.health === 'warning' ? `⚠️ ${t('action.warning')}` : `🚨 ${t('action.danger')}`}
                         </span>
                     </div>
                     <div className="position-details">
                         <div className="position-row">
-                            <span>{t('action.collateral', 'Collateral')}</span>
+                            <span>{t('action.collateral')}</span>
                             <span>{parseFloat(userPosition.collateral).toFixed(6)} {currencySymbol}</span>
                         </div>
                         <div className="position-row">
-                            <span>{t('action.cowDebt', 'COW Minted')}</span>
+                            <span>{t('action.cowDebt')}</span>
                             <span>{parseFloat(userPosition.cowMinted).toFixed(4)} COW</span>
                         </div>
                         <div className="position-row">
-                            <span>{t('action.collateralRatio', 'Collateral Ratio')}</span>
+                            <span>{t('action.collateralRatio')}</span>
                             <span className={`ratio-value ratio-${userPosition.health}`}>
                                 {(userPosition.collateralRatio / 100).toFixed(1)}%
                             </span>
@@ -271,11 +271,11 @@ export function ActionPanel({
                         </div>
                         <div>
                             <h3 className="card-title">
-                                {isCOWActive ? t('action.mintCOWTitle', 'Mint COW') : t('action.mintTitle')}
+                                {isCOWActive ? t('action.mintCOWTitle') : t('action.mintTitle')}
                             </h3>
                             <p className="card-subtitle">
                                 {isCOWActive
-                                    ? t('action.mintCOWSubtitleV2', 'Deposit BNB collateral → Receive COW tokens at LTV')
+                                    ? t('action.mintCOWSubtitleV2')
                                     : t('action.mintSubtitle')}
                             </p>
                         </div>
@@ -285,7 +285,7 @@ export function ActionPanel({
                     {isConnected && bnbBalance && (
                         <div className="action-preview" style={{ marginBottom: '12px' }}>
                             <div className="preview-row">
-                                <span>💰 {t('action.bnbBalance', 'Your BNB Balance')}</span>
+                                <span>💰 {t('action.bnbBalance')}</span>
                                 <span className="preview-value" style={{ fontSize: '1.05rem', fontWeight: 600 }}>
                                     {parseFloat(bnbBalance).toFixed(4)} {currencySymbol}
                                 </span>
@@ -294,7 +294,7 @@ export function ActionPanel({
                                 <div className="preview-row">
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                         <img src="/media/cow_sp.gif" alt="COW" className="cow-balance-icon" />
-                                        {t('action.cowBalanceMint', 'Your COW Balance')}
+                                        {t('action.cowBalanceMint')}
                                     </span>
                                     <span className="preview-value" style={{ fontSize: '1.05rem', fontWeight: 600, color: '#8B5CF6' }}>
                                         {cowBalance ? parseFloat(cowBalance).toFixed(4) : '0.0000'} COW
@@ -328,7 +328,7 @@ export function ActionPanel({
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <polyline points="6 9 12 15 18 9" />
                                 </svg>
-                                <span className="conversion-label">Bạn sẽ nhận được</span>
+                                <span className="conversion-label">{t('action.youWillReceive')}</span>
                                 <span className="conversion-value">
                                     ≈ {parseFloat(effectiveMintPreview.tokensOut).toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 })} COW
                                 </span>
@@ -362,18 +362,18 @@ export function ActionPanel({
                     {isCOWActive && effectiveMintPreview && (
                         <div className="action-preview">
                             <div className="preview-row">
-                                <span style={{ color: '#34d399' }}>💰 Giá Mint: ${(effectiveMintPreview as any).mintPrice?.toFixed(4) || '0.0000'}</span>
+                                <span style={{ color: '#34d399' }}>💰 {t('action.mintPrice')}: ${(effectiveMintPreview as any).mintPrice?.toFixed(4) || '0.0000'}</span>
                             </div>
                             <div className="preview-row">
-                                <span>{t('action.youReceive', 'You receive')}</span>
+                                <span>{t('action.youReceive')}</span>
                                 <span className="preview-value">{formatPreview(effectiveMintPreview.tokensOut)} COW</span>
                             </div>
                             <div className="preview-row">
-                                <span>{t('action.spreadFee', 'Spread (1%)')}</span>
+                                <span>{t('action.spreadFee')} (1%)</span>
                                 <span className="preview-fee">{formatPreview(effectiveMintPreview.spreadFee)} COW</span>
                             </div>
                             <div className="preview-row">
-                                <span>{t('action.mintFee', 'Mint Fee (0.3%)')}</span>
+                                <span>{t('action.mintFee')} (0.3%)</span>
                                 <span className="preview-fee">{formatPreview(effectiveMintPreview.mintFee)} COW</span>
                             </div>
                         </div>
@@ -396,7 +396,7 @@ export function ActionPanel({
                                     <line x1="12" y1="5" x2="12" y2="19" />
                                     <line x1="5" y1="12" x2="19" y2="12" />
                                 </svg>
-                                {isCOWActive ? t('action.mintCOWButton', 'Mint COW') : t('action.mintButton')}
+                                {isCOWActive ? t('action.mintCOWButton') : t('action.mintButton')}
                             </>
                         )}
                     </button>
@@ -419,11 +419,11 @@ export function ActionPanel({
                         </div>
                         <div>
                             <h3 className="card-title">
-                                {isCOWActive ? t('action.burnCOWTitle', 'Burn COW') : t('action.burnTitle')}
+                                {isCOWActive ? t('action.burnCOWTitle') : t('action.burnTitle')}
                             </h3>
                             <p className="card-subtitle">
                                 {isCOWActive
-                                    ? t('action.burnCOWSubtitleV2', 'Burn COW tokens → Release BNB collateral')
+                                    ? t('action.burnCOWSubtitleV2')
                                     : t('action.burnSubtitle')}
                             </p>
                         </div>
@@ -433,7 +433,7 @@ export function ActionPanel({
                     {isCOWActive && isConnected && (
                         <div className="action-preview" style={{ marginBottom: '12px' }}>
                             <div className="preview-row">
-                                <span>💰 {t('action.currentBalance', 'Your COW Balance')}</span>
+                                <span>💰 {t('action.currentBalance')}</span>
                                 <span className="preview-value" style={{ fontSize: '1.05rem', fontWeight: 600 }}>
                                     {cowBalance ? parseFloat(cowBalance).toFixed(4) : '0.0000'} COW
                                 </span>
@@ -444,7 +444,7 @@ export function ActionPanel({
                     <div className="input-group">
                         <label htmlFor="burn-amount" className="input-label">
                             {isCOWActive
-                                ? t('action.cowAmountLabel', 'Amount (COW)')
+                                ? t('action.cowAmountLabel')
                                 : `${t('action.amountLabel')} (${currencySymbol})`}
                         </label>
                         <div className="input-wrapper">
@@ -456,7 +456,7 @@ export function ActionPanel({
                                 value={burnAmount}
                                 onChange={(e) => setBurnAmount(e.target.value)}
                                 className="amount-input"
-                                placeholder={isCOWActive ? t('action.cowAmountPlaceholder', 'COW amount to burn') : t('action.amountPlaceholder')}
+                                placeholder={isCOWActive ? t('action.cowAmountPlaceholder') : t('action.amountPlaceholder')}
                                 disabled={!isConnected || txState.isLoading}
                             />
                             <span className="input-suffix">{isCOWActive ? 'COW' : currencySymbol}</span>
@@ -479,7 +479,7 @@ export function ActionPanel({
                                     onClick={() => setBurnAmount(cowBalance)}
                                     disabled={txState.isLoading}
                                 >
-                                    MAX
+                                    {t('action.maxButton')}
                                 </button>
                             </div>
                         )}
@@ -489,14 +489,14 @@ export function ActionPanel({
                     {isCOWActive && effectiveBurnPreview && (
                         <div className="action-preview">
                             <div className="preview-row">
-                                <span style={{ color: '#fb923c' }}>💰 Giá Burn: ${(effectiveBurnPreview as any).burnPrice?.toFixed(4) || '0.0000'}</span>
+                                <span style={{ color: '#fb923c' }}>💰 {t('action.burnPrice')}: ${(effectiveBurnPreview as any).burnPrice?.toFixed(4) || '0.0000'}</span>
                             </div>
                             <div className="preview-row">
-                                <span>{t('action.youReceive', 'You receive')}</span>
+                                <span>{t('action.youReceive')}</span>
                                 <span className="preview-value">{formatPreview(effectiveBurnPreview.bnbOut)} {currencySymbol}</span>
                             </div>
                             <div className="preview-row">
-                                <span>{t('action.burnFee', 'Burn Fee (0.3%)')}</span>
+                                <span>{t('action.burnFee')} (0.3%)</span>
                                 <span className="preview-fee">{formatPreview(effectiveBurnPreview.burnFee)} {currencySymbol}</span>
                             </div>
                         </div>
@@ -518,7 +518,7 @@ export function ActionPanel({
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M12 12c-2-2.67-6-2.67-6 2 0 3.13 2.69 6 6 9 3.31-3 6-5.88 6-9 0-4.67-4-4.67-6-2z" />
                                 </svg>
-                                {isCOWActive ? t('action.burnCOWButton', 'Burn COW') : t('action.burnButton')}
+                                {isCOWActive ? t('action.burnCOWButton') : t('action.burnButton')}
                             </>
                         )}
                     </button>

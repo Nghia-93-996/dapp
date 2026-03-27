@@ -43,8 +43,8 @@ function App() {
     wallet.chainId ?? null,
   );
 
-  // Track the user-selected network (default BSC Testnet for COW)
-  const [selectedChainId, setSelectedChainId] = useState<string>('0x61');
+  // Track the user-selected network (default BSC Mainnet for COW)
+  const [selectedChainId, setSelectedChainId] = useState<string>('0x38');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -64,17 +64,17 @@ function App() {
   const handleConnect = useCallback(async () => {
     try {
       await connectWallet();
-      toast.success('🦊 Wallet connected successfully!');
+      toast.success(t('wallet.connectedSuccess'));
     } catch {
-      toast.error('❌ Failed to connect wallet');
+      toast.error(t('wallet.connectedError'));
     }
-  }, [connectWallet]);
+  }, [connectWallet, t]);
 
   // Disconnect wallet with toast
   const handleDisconnect = useCallback(() => {
     disconnectWallet();
-    toast.info('👋 Wallet disconnected');
-  }, [disconnectWallet]);
+    toast.info(t('wallet.disconnectedInfo'));
+  }, [disconnectWallet, t]);
 
   // Auto-switch to selected network after wallet connects
   useEffect(() => {
@@ -124,7 +124,7 @@ function App() {
             <div className="logo-icon-wrapper">
               <img src="/media/cow_sp.gif" alt="COW Logo" className="logo-img" />
             </div>
-            <span className="logo-text">COW <span className="logo-accent">Stablecoin</span></span>
+            <span className="logo-text">COW <span className="logo-accent">{t('common.stablecoin', 'Stablecoin')}</span></span>
           </Link>
 
           {/* Desktop Nav */}

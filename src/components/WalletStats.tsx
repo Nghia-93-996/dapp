@@ -36,7 +36,7 @@ export function WalletStats({ balance, chainId, address, getNetworkName, cowBala
         ...(hasCOW
             ? [
                 {
-                    label: 'COW Balance',
+                    label: t('wallet.cowBalance'),
                     value: cowBalance
                         ? `${parseFloat(cowBalance).toFixed(4)} COW ≈ $${(parseFloat(cowBalance) * (cowPriceUsd ?? 1)).toFixed(2)}`
                         : '0.0000 COW',

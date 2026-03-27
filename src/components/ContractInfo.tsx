@@ -19,9 +19,9 @@ export function ContractInfo() {
     const { wallet } = useWalletContext();
     const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
 
-    const chainId = wallet.chainId ?? '0x61'; // Fallback to Testnet
+    const chainId = wallet.chainId ?? '0x38'; // Fallback to Mainnet
     const config = getNetworkConfig(chainId);
-    const explorerBase = config?.blockExplorerUrl ?? 'https://testnet.bscscan.com';
+    const explorerBase = config?.blockExplorerUrl ?? 'https://bscscan.com';
 
     const contracts = useMemo(() => {
         const list: ContractItem[] = [];
