@@ -121,7 +121,7 @@
         "connectWallet": "连接钱包",
         "connectWalletText": "点击标题栏的'连接钱包'按钮。MetaMask 将提示您批准连接。连接后，您的钱包地址、BNB 余额、COW 代币余额和抵押仓位将显示。DApp 使用只读访问——您的私钥永远不会离开 MetaMask。",
         "howMintingWorks": "抵押铸造原理",
-        "howMintingWorksText": "COW Token V2 使用类似 DAI/MakerDAO 的抵押支持模型。铸造 COW 代币时，您存入 BNB 作为抵押品。协议使用 Chainlink 实时 BNB/USD 预言机价格计算 BNB 的美元价值，然后应用 80% 贷款价值比 (LTV) 确定您获得的 COW 数量。每个 COW 代币锚定 $1 USD。例如：以 $600 BNB/USD 存入 1 BNB 可获得 $600 × 80% = $480 COW 代币（扣费前）。",
+        "howMintingWorksText": "COW Token V2 采用类似于 DAI/MakerDAO 的抵押模型。铸造 COW 代币时，您需要存入 BNB 作为抵押品。协议会使用 Chainlink 的实时 BNB/USD 价格预言机计算 BNB 的美元价值，然后应用 80% 的贷款价值比 (LTV) 来确定您获得的 COW 代币数量。每个 COW 代币当前锚定为 0.2603 美元（COW 价格将通过算术平均法在 coinofworld.com 官方网站上显示）。例如，如果您以 600 美元的 BNB/USD 价格存入 1 个 BNB，您将获得 600 美元 × 80% = 480 美元的 TLV。480 美元 ÷ 0.2603 美元 COW = 1844.0261 个 COW（未扣除手续费）。",
         "stepsToMint": "铸造步骤与费用明细",
         "stepsToMintText": "1. 输入要作为抵押品存入的 BNB 数量。2. DApp 显示预览：获得的 COW 代币、价差费 (1% → 金库)、铸造费 (0.3% → 费用收集器) 和抵押比率。3. 点击'铸造代币'并在 MetaMask 中批准交易。4. BNB 抵押品锁定在智能合约中，COW 代币铸造到钱包。5. 仓位被记录：抵押数量、已铸造 COW 和健康比率。您可以随时添加更多抵押品——仓位会累积。",
         "whatIsBurning": "销毁 COW 与赎回抵押品",
