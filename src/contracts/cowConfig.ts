@@ -69,7 +69,7 @@ export const COW_TOKEN_ADDRESSES: Record<string, string> = {
     // BSC Testnet (chain 97 = 0x61)
     '0x61': '0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332',
     // BSC Mainnet (chain 56 = 0x38)
-    // '0x38': '0x...',
+    '0x38': '0x4C79D24eF2C1166c88375BCe730fdE8894f266Ab',
 };
 
 /**
@@ -115,7 +115,18 @@ export const TIMELOCK_ADDRESSES: Record<string, string> = {
     // BSC Testnet (chain 97 = 0x61)
     '0x61': '0xEad577d7730bE3d191CbC4e6657816efE7507437',
     // BSC Mainnet (chain 56 = 0x38)
-    // '0x38': '0x...',
+    '0x38': '0xf8Ed2CD8b1C66c7700641E065b98B129141fd156',
+};
+
+/**
+ * Known contract creators / deployers per chain.
+ * This address has the 'Price Updater' role in COWToken.
+ */
+export const ADMIN_CREATOR_ADDRESSES: Record<string, string> = {
+    // BSC Testnet
+    '0x61': '0xA820AA03894d60E7fcDe0B6C5Add291091fDF223',
+    // BSC Mainnet
+    '0x38': '0xA820AA03894d60E7fcDe0B6C5Add291091fDF223',
 };
 
 /**
@@ -124,4 +135,38 @@ export const TIMELOCK_ADDRESSES: Record<string, string> = {
 export function getTimelockAddress(chainId: string | null): string | null {
     if (!chainId) return null;
     return TIMELOCK_ADDRESSES[chainId] || null;
+}
+
+/**
+ * Get the Creator address for the current chain.
+ */
+export function getCreatorAddress(chainId: string | null): string | null {
+    if (!chainId) return null;
+    return ADMIN_CREATOR_ADDRESSES[chainId] || null;
+}
+
+/**
+ * Static Fee Collector addresses for UI presentation.
+ */
+export const FEE_COLLECTOR_ADDRESSES: Record<string, string> = {
+    // BSC Testnet
+    '0x61': '0xCaCf62df403bB440E2490ED1a741192dD48a10A0',
+    // BSC Mainnet
+    '0x38': '0xA820AA03894d60E7fcDe0B6C5Add291091fDF223',
+};
+
+/**
+ * Get the Fee Collector address for the current chain.
+ */
+export function getFeeCollectorAddress(chainId: string | null): string | null {
+    if (!chainId) return null;
+    return FEE_COLLECTOR_ADDRESSES[chainId] || null;
+}
+
+/**
+ * Get the Known Owner (Timelock) address for the current chain.
+ * Falls back to the Timelock address itself since it's the intended owner.
+ */
+export function getKnownOwnerAddress(chainId: string | null): string | null {
+    return getTimelockAddress(chainId);
 }

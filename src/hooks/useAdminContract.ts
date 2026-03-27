@@ -4,6 +4,7 @@ import type { BrowserProvider } from 'ethers';
 import {
   COW_TOKEN_ABI, getCOWTokenAddress, isCOWChainSupported,
   TIMELOCK_ABI, getTimelockAddress, TIMELOCK_MIN_DELAY,
+  getCreatorAddress, getKnownOwnerAddress,
 } from '../contracts/cowConfig';
 
 // ─── Types ─────────────────────────────────────────────────────────
@@ -30,20 +31,14 @@ export interface AdminState {
   isLoading: boolean;
 }
 
-// ─── Constants ─────────────────────────────────────────────────────
-
-/** Timelock address (owner of COWToken after deployment) */
-const KNOWN_OWNER = '0xEad577d7730bE3d191CbC4e6657816efE7507437';
-
-/** Deployer / priceUpdater — authorized to call setCOWPrice directly */
-const CONTRACT_CREATOR = '0xA820AA03894d60E7fcDe0B6C5Add291091fDF223';
+// Constants replaced by chain-specific lookups inside hook
 
 const STORAGE_KEY = 'cow-timelock-ops';
 
 const DEFAULT_ADMIN_STATE: AdminState = {
   isOwner: false,
   isPriceUpdater: false,
-  ownerAddress: KNOWN_OWNER,
+  ownerAddress: '',
   priceUpdater: '',
   isPaused: false,
   feeCollector: '',
@@ -69,11 +64,11 @@ function saveOps(chainId: string, ops: TimelockOp[]) {
 // ─── Helpers ───────────────────────────────────────────────────────
 
 /** Check if a user address matches the contract owner or deployer/creator */
-function isAuthorizedAdmin(userAddress: string, ownerAddress: string): boolean {
+function isAuthorizedAdmin(userAddress: string, ownerAddress: string, creatorAddress: string | null): boolean {
   const user = userAddress.toLowerCase();
   return (
     (!!ownerAddress && user === ownerAddress.toLowerCase()) ||
-    user === CONTRACT_CREATOR.toLowerCase()
+    (!!creatorAddress && user === creatorAddress.toLowerCase())
   );
 }
 
@@ -138,7 +133,7 @@ export function useAdminContract(
       return;
     }
 
-    setState(prev => ({ ...prev, isLoading: true }));
+    setState((prev: AdminState) => ({ ...prev, isLoading: true }));
 
     try {
       const contract = getCowContract();
@@ -159,9 +154,9 @@ export function useAdminContract(
       const priceUpdater = settledValue<string>(settled, 4, '');
 
       setState({
-        isOwner: !!userAddress && isAuthorizedAdmin(userAddress, ownerAddress),
+        isOwner: !!userAddress && isAuthorizedAdmin(userAddress, ownerAddress, getCreatorAddress(chainId)),
         isPriceUpdater: !!userAddress && userAddress.toLowerCase() === priceUpdater.toLowerCase(),
-        ownerAddress,
+        ownerAddress: ownerAddress || getKnownOwnerAddress(chainId) || '',
         priceUpdater,
         isPaused,
         feeCollector,
@@ -170,7 +165,7 @@ export function useAdminContract(
       });
     } catch (err) {
       console.error('[Admin] Failed to fetch admin state:', err);
-      setState(prev => ({ ...prev, isLoading: false }));
+      setState((prev: AdminState) => ({ ...prev, isLoading: false }));
     }
   }, [provider, chainId, userAddress, getCowContract]);
 

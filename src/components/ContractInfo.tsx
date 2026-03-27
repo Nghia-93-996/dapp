@@ -1,5 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useWalletContext } from '../hooks/WalletContext';
+import { getCOWTokenAddress, getTimelockAddress, getFeeCollectorAddress } from '../contracts/cowConfig';
+import { getNetworkConfig } from '../config/networks';
 import './ContractInfo.css';
 
 interface ContractItem {
@@ -9,45 +12,67 @@ interface ContractItem {
     icon: React.ReactNode;
 }
 
-const CONTRACTS: ContractItem[] = [
-    {
-        name: 'COWToken',
-        address: '0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332',
-        explorerUrl: 'https://testnet.bscscan.com/address/0xA381f67E1c448d18569A2397B7e8BbD9D4DcD332',
-        icon: (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 6v12M6 12h12" />
-            </svg>
-        ),
-    },
-    {
-        name: 'COWTimelock',
-        address: '0xEad577d7730bE3d191CbC4e6657816efE7507437',
-        explorerUrl: 'https://testnet.bscscan.com/address/0xEad577d7730bE3d191CbC4e6657816efE7507437',
-        icon: (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-            </svg>
-        ),
-    },
-    {
-        name: 'Fee Collector',
-        address: '0xCaCf62df403bB440E2490ED1a741192dD48a10A0',
-        explorerUrl: 'https://testnet.bscscan.com/address/0xCaCf62df403bB440E2490ED1a741192dD48a10A0',
-        icon: (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="1" y="3" width="22" height="18" rx="3" ry="3" />
-                <line x1="1" y1="9" x2="23" y2="9" />
-            </svg>
-        ),
-    },
-];
+// CONTRACTS array is now generated dynamically inside the component
 
 export function ContractInfo() {
     const { t } = useTranslation();
+    const { wallet } = useWalletContext();
     const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+
+    const chainId = wallet.chainId ?? '0x61'; // Fallback to Testnet
+    const config = getNetworkConfig(chainId);
+    const explorerBase = config?.blockExplorerUrl ?? 'https://testnet.bscscan.com';
+
+    const contracts = useMemo(() => {
+        const list: ContractItem[] = [];
+
+        const tokenAddr = getCOWTokenAddress(chainId);
+        if (tokenAddr) {
+            list.push({
+                name: 'COWToken',
+                address: tokenAddr,
+                explorerUrl: `${explorerBase}/address/${tokenAddr}`,
+                icon: (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 6v12M6 12h12" />
+                    </svg>
+                ),
+            });
+        }
+
+        const timelockAddr = getTimelockAddress(chainId);
+        if (timelockAddr) {
+            list.push({
+                name: 'COWTimelock',
+                address: timelockAddr,
+                explorerUrl: `${explorerBase}/address/${timelockAddr}`,
+                icon: (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                ),
+            });
+        }
+
+        const feeCollectorAddr = getFeeCollectorAddress(chainId);
+        if (feeCollectorAddr) {
+            list.push({
+                name: 'Fee Collector',
+                address: feeCollectorAddr,
+                explorerUrl: `${explorerBase}/address/${feeCollectorAddr}`,
+                icon: (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="1" y="3" width="22" height="18" rx="3" ry="3" />
+                        <line x1="1" y1="9" x2="23" y2="9" />
+                    </svg>
+                ),
+            });
+        }
+
+        return list;
+    }, [chainId, explorerBase]);
 
     const handleCopy = useCallback((address: string, idx: number) => {
         navigator.clipboard.writeText(address).then(() => {
@@ -62,15 +87,15 @@ export function ContractInfo() {
     return (
         <section className="contract-info" id="contracts">
             <div className="section-header">
-                <span className="section-badge contract-badge">📜 BSC Testnet</span>
+                <span className="section-badge contract-badge">📜 {config?.name || 'BSC Testnet'}</span>
                 <h2 className="section-title">{t('contracts.title', 'Smart Contracts')}</h2>
                 <p className="section-desc">
-                    {t('contracts.description', 'Verified smart contracts deployed on BSC Testnet')}
+                    {t('contracts.description', `Verified smart contracts deployed on ${config?.name || 'BSC Testnet'}`)}
                 </p>
             </div>
 
             <div className="contract-cards">
-                {CONTRACTS.map((c, idx) => (
+                {contracts.map((c: ContractItem, idx: number) => (
                     <div className="contract-card" key={c.address}>
                         <div className="contract-card-header">
                             <div className={`contract-icon contract-icon-${idx + 1}`}>
